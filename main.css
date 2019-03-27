@@ -20,7 +20,43 @@ a
 .logo
 {
     font-size: 18px;
+}
+.main_bar
+{
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
     border-bottom: rgb(110, 1, 1) solid 2px;
+    padding-bottom: 5px;
+}
+ul.nav
+{
+    list-style-type: none;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    line-height: 200%;
+}
+ul.nav a
+{
+    text-decoration: none;
+    display: block;
+}
+ul.nav  li
+{
+    float: left;
+    width: 150px;
+    height: 40px;
+    background-color: #220101;
+    border-right: rgb(110, 1, 1) dashed 2px;
+}
+ul.nav li.last
+{
+    border: none;
+}
+ul.nav li:hover
+{
+    background-color: #720e0e;
 }
 .main_page_form
 {
@@ -32,6 +68,7 @@ a
 {
     font-size: 20px;
     line-height: 200%;
+    height: 200px;
 }
 h2
 {

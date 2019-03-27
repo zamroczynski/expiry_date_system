@@ -21,6 +21,13 @@
         <div class="logo">
             <a href="index.php"><h1>Terminy <span style="color:green;"> ONLINE </span>- Stacja 4449</h1></a>
         </div>
+        <div class="main_bar">
+            <ul class="nav">
+                <a href="index.php"><li>Terminy</li></a>
+                <a href="messages.php"><li>Wiadomości</li></a>
+                <a href="log_in.php"><li class="last">Logowanie</li></a>
+            </ul>
+        </div>
         <div class="result">
             
         </div>
