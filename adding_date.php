@@ -8,7 +8,7 @@
     $string_form_product_search = '
         <div class="adding_date_form">
             <form method="POST" action="adding_date.php">
-                <ul>
+                <ul class="adding">
                 <li><input type="text" name="product_name" placeholder="Wpisz nazwę produktu" /></li>
                 <li><input type="submit" value="Wyszukaj" /></li>
                 </ul>
@@ -73,7 +73,8 @@
                     echo $row['name'];
                     echo '</li>';
                 }
-                echo '<input type="submit" /></form>';
+                echo '<input type="date" name="expiry_date" value="" />';
+                echo '<input type="submit" value="Zapisz termin" /></form>';
                 echo "</ol>";
             }
             else

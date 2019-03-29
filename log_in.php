@@ -65,7 +65,7 @@
             </ul>
         </div>
         <div class="login_area">
-            <ul>
+            <ul class="login">
                 <div style="margin-left:auto; margin-right:auto; margin-bottom:5px;">LOGOWANIE</div>
                     <form action="log_in.php" method="post">
                         <li><input type="text" name="login" placeholder="Twój login..." /></li>

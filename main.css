@@ -101,6 +101,7 @@ ul.nav li:hover
     line-height: 200%;
     min-height: 300px;
     overflow: hidden;
+    text-align: center;
 }
 h2
 {
@@ -169,7 +170,6 @@ input
 }
 input[type=text]
 {
-    width: 40%;
     padding: 3px 5px;
     margin: 4px 0;
     display: inline-block;
@@ -179,7 +179,6 @@ input[type=text]
 }
 input[type=password]
 {
-    width: 40%;
     padding: 3px 5px;
     margin: 4px 0;
     display: inline-block;
@@ -189,7 +188,6 @@ input[type=password]
 }
 input[type=submit] 
 {
-    width: 30%;
     background-color: rgb(110, 1, 1);
     color: white;
     padding: 7px 10px;
@@ -229,4 +227,20 @@ input[type=submit]:hover
 .hello_div > h2
 {
     font-size: 40px;
+}
+ol.result
+{
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+ul.adding > li > input
+{
+    width: 50%;
+    height: 30px;
+}
+.login_area > ul.login > li > input
+{
+    width: 30%;
+    height: 30px;
 }
