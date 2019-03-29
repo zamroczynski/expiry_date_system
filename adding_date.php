@@ -22,6 +22,14 @@
         FROM products 
         WHERE products.name LIKE "%'.$product_name.'%"');
     }
+    if (isset($_SESSION['expiry_date']))
+    {
+        $expiry_date = filter_input(INPUT_POST, 'expiry_date');
+        require_once 'database_connection.php';
+        $expiry_test_query = $db->prepare('SELECT products.id, expiry_date.id_product, expiry_date.date 
+        FROM expiry_date INNER JOIN products ON products.id=expiry_date.id_product 
+        WHERE expiry_date.date="'.$expiry_date.'" AND products.id="'.$product_name.'"');
+    }
 ?>
 <!DOCTYPE HTML>
 <html lang="pl">
@@ -65,18 +73,20 @@
             $products = $product_query->fetchAll();
             if ($products)
             {
-                echo '<ol class="result">';
+                
+                echo '<form method="post" action="adding_date.php">';
+                echo '<div class="result_grid">';
                 foreach($products as $row)
                 {
-                    echo '<form method="post" action="adding_date.php"><li>';
+                    echo '<div>';
                     echo '<input type="radio" name="'.$row['id'].'" />';
                     echo $row['name'];
-                    echo '</li>';
+                    echo '</div>';
                 }
-                echo '<input type="date" name="expiry_date" value="" />';
+                echo '<input type="date" name="expiry_date" />';
                 echo '<div style="margin: 0 10px;"></div>';
-                echo '<input type="submit" value="Zapisz termin" /></form>';
-                echo "</ol>";
+                echo '<input type="submit" value="Zapisz termin" /></div></form>';
+                echo "";
             }
             else
             {
@@ -94,6 +104,6 @@
         ?>
         <div class="footer">Termin <span style="color:green;">ONLINE</span> - Stacja 4449 Bydgoszcz by Damian Zamroczynski &copy; 2019 Kontakt: damianzamroczynski@gmail.com</div>
     </div>
-    <?php unset($_POST['product_name']); ?>
+    <?php unset($_POST['product_name']); unset($_POST['expiry_date']); ?>
 </body>
 </html>

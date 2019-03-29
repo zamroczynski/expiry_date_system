@@ -248,3 +248,10 @@ ul.adding > li > input
 {
     margin-left: 10px;
 }
+.result_gridt
+{
+    display: grid;
+    grid-template-columns: auto auto auto;
+    grid-gap: 10px;
+    background-color: #720e0e;
+}
