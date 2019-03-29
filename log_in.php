@@ -40,7 +40,7 @@
 <html lang="pl">
 <head>
 	<meta charset="utf-8" />
-	<title>Stacja Paliw 4449 - Terminy</title>
+	<title>Stacja Paliw 4449 - Zaloguj</title>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 	<meta name="author" content="Damian Zamroczynski" />
 
