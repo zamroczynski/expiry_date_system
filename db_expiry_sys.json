@@ -1,0 +1,48 @@
+[
+{"type":"header","version":"4.8.0.1","comment":"Export to JSON plugin for PHPMyAdmin"},
+{"type":"database","name":"db_expiry_sys"},
+{"type":"table","name":"expiry_date","database":"db_expiry_sys","data":
+[
+{"id":"1","id_product":"1","date":"2019-03-27","amount":null},
+{"id":"2","id_product":"2","date":"2019-03-27","amount":null},
+{"id":"7","id_product":"1","date":"2019-03-26","amount":null},
+{"id":"8","id_product":"4","date":"2019-03-26","amount":null},
+{"id":"9","id_product":"5","date":"2019-03-26","amount":null},
+{"id":"10","id_product":"6","date":"2019-03-28","amount":null},
+{"id":"11","id_product":"5","date":"2019-03-28","amount":null},
+{"id":"12","id_product":"2","date":"2019-03-29","amount":null},
+{"id":"13","id_product":"4","date":"2019-03-29","amount":null},
+{"id":"14","id_product":"6","date":"2019-03-29","amount":null},
+{"id":"15","id_product":"5","date":"2019-03-29","amount":null},
+{"id":"16","id_product":"2","date":"2019-03-29","amount":null},
+{"id":"17","id_product":"3","date":"2019-03-29","amount":null},
+{"id":"18","id_product":"4","date":"2019-03-29","amount":null},
+{"id":"19","id_product":"5","date":"2019-03-29","amount":null}
+]
+}
+,{"type":"table","name":"messages","database":"db_expiry_sys","data":
+[
+{"id":"1","contents":"Słuchajcie, słuchajcie, mieszkańcy Khorinis!\r\n\r\nNa rozkaz wielmożnego lorda Hagena ogłasza się co następuje.\r\n\r\nW związku z zaistniałą sytuacją dla własnego bezpieczeństwa, obywatele powinni unikać lasów i bezdroży dookoła miasta co więcej zabrania się kontaktów ze zbuntowanymi wieśniakami.\r\n\r\nOd chwili obecnej lord Andre przejmuje wyłączne dowództwo nad naszą strażą.\r\n\r\nWszyscy mieszkańcy którzy posiadają jakiekolwiek przeszkolenie w zakresie walki niech wstępują w szeregi straży .\r\n\r\nWszelkie środki bezpieczeństwa dotyczące górnego miasta zostaną jeszcze bardziej zaostrzone.\r\n\r\nStrażnicy strzegący bram nie będą przepuszczać nikogo kto nie posiada zezwolenia na wejście od miasta.\r\n\r\nWe wszystkich miastach i regionach królestwa zostaje wprowadzony stan wojenny.\r\n\r\nSędziowie cywilni zostają pozbawieni swych praw a ich obowiązki przejmuj królewscy paladyni.\r\n\r\nKażdy kto popełnił przestępstwo lub sprzeciwi się królewskiej straży podlega surowej krze.\r\n\r\nEgzekucją tego prawa zajmie się wielmożny lord Andre.\r\n\r\nKażdy mieszkaniec Khorinis, który popełnił jakiekolwiek wykroczenie ma obowiązek zgłosić się do lorda Andre.\r\n\r\nW związku z atakiem zagrażającym naszemu miastu ma obowiązek przygotować się do walki tak jak pozwala mu jego stan majątkowy, dotyczy to zaopatrzenia się w zbroję i oręż, a także natychmiastowe rozpoczęcie treningu bojowego.","date_start":"2019-03-24","date_end":"2019-03-31","id_user":"1","active":"1","rank":"3"},
+{"id":"2","contents":"Testowa krótka wiadomość. Proszę tego nie czytać. To służy tylko testowaniu aplikacji. yoyo","date_start":"2019-03-24","date_end":"2019-03-31","id_user":"2","active":"1","rank":"0"},
+{"id":"4","contents":"tututuutututu","date_start":"2019-03-01","date_end":"2019-03-30","id_user":"2","active":"1","rank":"3"},
+{"id":"5","contents":"pam pam pam ","date_start":"2019-03-13","date_end":"2019-03-29","id_user":"1","active":"1","rank":"0"},
+{"id":"6","contents":"ważna wiadmość","date_start":"2019-03-01","date_end":"2019-04-30","id_user":"1","active":"1","rank":"2"}
+]
+}
+,{"type":"table","name":"products","database":"db_expiry_sys","data":
+[
+{"id":"1","name":"product_test_1","ean_code":null},
+{"id":"2","name":"product_test_2","ean_code":null},
+{"id":"3","name":"product_test_3","ean_code":null},
+{"id":"4","name":"product_test_4","ean_code":null},
+{"id":"5","name":"product_test_5","ean_code":null},
+{"id":"6","name":"product_test_6","ean_code":null}
+]
+}
+,{"type":"table","name":"users","database":"db_expiry_sys","data":
+[
+{"id":"1","login":"damian","password":"zamrix","email":"damianzamroczynski@gmail.com","name":"Damian","power":"10","last_login":"2019-03-27"},
+{"id":"2","login":"benek","password":"franek","email":null,"name":"Benek","power":"0","last_login":"2019-03-29"}
+]
+}
+]
