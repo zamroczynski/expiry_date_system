@@ -149,6 +149,10 @@ ol.messages ul li
     line-height: 200%;
     margin: 2px 10px;
 }
+ul
+{
+    list-style-type: none;
+}
 .login_area
 {
     margin-left: auto;
