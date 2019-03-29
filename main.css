@@ -244,3 +244,7 @@ ul.adding > li > input
     width: 30%;
     height: 30px;
 }
+.expiry_date_input
+{
+    margin-left: 10px;
+}

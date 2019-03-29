@@ -74,6 +74,7 @@
                     echo '</li>';
                 }
                 echo '<input type="date" name="expiry_date" value="" />';
+                echo '<div style="margin: 0 10px;"></div>';
                 echo '<input type="submit" value="Zapisz termin" /></form>';
                 echo "</ol>";
             }
