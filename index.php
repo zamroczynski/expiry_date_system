@@ -23,9 +23,9 @@
         </div>
         <div class="main_bar">
             <ul class="nav">
-                <a href="index.php"><li>Terminy</li></a>
-                <a href="messages.php"><li>Wiadomości</li></a>
-                <a href="log_in.php"><li class="last">Logowanie</li></a>
+                <li><a href="index.php">Terminy</a></li>
+                <li><a href="messages.php">Wiadomości</a></li>
+                <li class="last"><a href="log_in.php">Logowanie</a></li>
             </ul>
         </div>
         <div class="result">
