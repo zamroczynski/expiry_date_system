@@ -162,6 +162,10 @@ ul
     margin-bottom: 0;
     border-bottom: rgb(110, 1, 1) solid 2px;
 }
+input
+{
+    text-align: center;
+}
 input[type=text]
 {
     width: 40%;
