@@ -1,5 +1,10 @@
 <?php
     session_start();
+    require_once 'database_connection.php';
+    $today = new DateTime();
+    $today_string = $today->format('Y-m-d');
+    $today_query = 'SELECT expiry_date.id, expiry_date.date, products.name FROM expiry_date, products WHERE 
+    products.id=expiry_date.id_product AND expiry_date.date="'.$today_string.'" ORDER BY expiry_date.id';
 ?>
 <!DOCTYPE HTML>
 <html lang="pl">
@@ -29,7 +34,24 @@
             </ul>
         </div>
         <div class="result">
-            
+            <ol>
+                <?php
+                    echo "<h2>Produkty z datą przydatności do $today_string </h2>";
+                    $result = $db->query($today_query);
+                    if ($result->rowCount() > 0)
+                    {
+                        foreach($result as $row) {
+                            echo "<li>";
+                            print_r($row['name']);
+                            echo "</li>";
+                        }
+                    }
+                    else
+                    {
+                        echo "Brak produktów, które się terminują!";
+                    }
+                ?>
+            </ol>
         </div>
         <div class="main_page_form">
 
