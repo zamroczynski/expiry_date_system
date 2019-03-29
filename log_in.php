@@ -24,6 +24,9 @@
             $_SESSION['user_power'] = $user['power'];
             $_SESSION['user_email'] = $user['email'];
             $_SESSION['user_last_login'] = $user['last_login'];
+            $today = new DateTime();
+            $today_string = $today->format('Y-m-d H:i:s');
+            $db->query('UPDATE users SET last_login="'.$today_string.'"');
             header('Location: control_panel.php');
             exit();
         }

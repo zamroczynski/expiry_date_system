@@ -153,6 +153,7 @@ ol.messages ul li
 ul
 {
     list-style-type: none;
+    text-align: center;
 }
 .login_area
 {
@@ -161,6 +162,10 @@ ul
     margin-top: 15px;
     margin-bottom: 0;
     border-bottom: rgb(110, 1, 1) solid 2px;
+}
+input
+{
+    text-align: center;
 }
 input[type=text]
 {
@@ -182,7 +187,7 @@ input[type=password]
     border-radius: 4px;
     box-sizing: border-box;
 }
-li > input[type=submit] 
+input[type=submit] 
 {
     width: 30%;
     background-color: rgb(110, 1, 1);
@@ -201,7 +206,7 @@ li > input[type=password]:placeholder-shown
 {
     text-align: center;
 }
-li > input[type=submit]:hover 
+input[type=submit]:hover 
 {
     background-color: rgb(126, 3, 3);
 }
@@ -209,4 +214,19 @@ li > input[type=submit]:hover
 {
     font-size: 12px;
     padding: 10px;
+}
+.adding_date_form
+{
+    margin-left:auto;
+    margin-right: auto;
+}
+.hello_div
+{
+    border-bottom: rgb(110, 1, 1) solid 2px;
+    padding-bottom: 20px;
+    font-size: 12px;
+}
+.hello_div > h2
+{
+    font-size: 40px;
 }

@@ -30,16 +30,31 @@
         </div>
         <div class="main_bar">
             <ul class="nav">
-                <li><a href="#">Dodaj terminy</a></li>
+                <li><a href="adding_date.php">Dodaj terminy</a></li>
                 <li><a href="#">Edytuj terminy</a></li>
                 <li><a href="#">Dodaj produkty</a></li>
                 <li><a href="#">Edytuj produkty</a></li>
                 <li><a href="#">Dodaj wiadomości</a></li>
                 <li><a href="#">Edytuj wiadomości</a></li>
+                <li><a href="#">Profil</a></li>
                 <li class="last"><a href="log_out.php">Wyloguj się</a></li>
             </ul>
         </div>
-        
+        <div class="hello_div">
+            <h2>Witaj <?= $_SESSION['user_name'] ?> </h2>
+            <p>Ranga: 
+            <?php
+                if($_SESSION['user_power'] == 10) echo 'Admin';
+                if($_SESSION['user_power'] == 8) echo 'Prowadzący Stacje';
+                if($_SESSION['user_power'] == 6) echo 'Instruktor';
+                if($_SESSION['user_power'] == 4) echo 'Prowadzący zmianę';
+                if($_SESSION['user_power'] == 2) echo 'Pracownik';
+                if($_SESSION['user_power'] == 1) echo 'Nowy';
+                if($_SESSION['user_power'] == 0) echo 'Gość';
+            ?>
+            </p>
+            Ostatnie logowanie <?= $_SESSION['user_last_login'] ?>
+        </div>
         <div class="footer">Termin <span style="color:green;">ONLINE</span> - Stacja 4449 Bydgoszcz by Damian Zamroczynski &copy; 2019 Kontakt: damianzamroczynski@gmail.com</div>
     </div>
 </body>
