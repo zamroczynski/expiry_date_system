@@ -53,7 +53,7 @@
                                 print_r($row['name']);
                                 echo "</li>";
                                 echo "<li>";
-                                echo "Obowiązuje od: ";
+                                echo "Obowiązuje od ";
                                 print_r($row['date_start']);
                                 echo " do ";
                                 print_r($row['date_end']);

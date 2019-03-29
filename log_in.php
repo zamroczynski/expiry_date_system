@@ -17,9 +17,6 @@
         $user_query->bindValue(':password', $password, PDO::PARAM_STR);
         $user_query->execute();
         $user = $user_query->fetch();
-        echo $login . ' ';
-        echo $password;
-        echo $user_query->rowCount();
         if ($user)
         {
             $_SESSION['logged'] = true;

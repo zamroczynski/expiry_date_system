@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Czas generowania: 27 Mar 2019, 18:49
+-- Czas generowania: 29 Mar 2019, 13:42
 -- Wersja serwera: 10.1.32-MariaDB
 -- Wersja PHP: 7.2.5
 
@@ -46,7 +46,15 @@ INSERT INTO `expiry_date` (`id`, `id_product`, `date`, `amount`) VALUES
 (8, 4, '2019-03-26', NULL),
 (9, 5, '2019-03-26', NULL),
 (10, 6, '2019-03-28', NULL),
-(11, 5, '2019-03-28', NULL);
+(11, 5, '2019-03-28', NULL),
+(12, 2, '2019-03-29', NULL),
+(13, 4, '2019-03-29', NULL),
+(14, 6, '2019-03-29', NULL),
+(15, 5, '2019-03-29', NULL),
+(16, 2, '2019-03-29', NULL),
+(17, 3, '2019-03-29', NULL),
+(18, 4, '2019-03-29', NULL),
+(19, 5, '2019-03-29', NULL);
 
 -- --------------------------------------------------------
 
@@ -63,6 +71,17 @@ CREATE TABLE `messages` (
   `active` tinyint(1) NOT NULL,
   `rank` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+
+--
+-- Zrzut danych tabeli `messages`
+--
+
+INSERT INTO `messages` (`id`, `contents`, `date_start`, `date_end`, `id_user`, `active`, `rank`) VALUES
+(1, 'Słuchajcie, słuchajcie, mieszkańcy Khorinis!\r\n\r\nNa rozkaz wielmożnego lorda Hagena ogłasza się co następuje.\r\n\r\nW związku z zaistniałą sytuacją dla własnego bezpieczeństwa, obywatele powinni unikać lasów i bezdroży dookoła miasta co więcej zabrania się kontaktów ze zbuntowanymi wieśniakami.\r\n\r\nOd chwili obecnej lord Andre przejmuje wyłączne dowództwo nad naszą strażą.\r\n\r\nWszyscy mieszkańcy którzy posiadają jakiekolwiek przeszkolenie w zakresie walki niech wstępują w szeregi straży .\r\n\r\nWszelkie środki bezpieczeństwa dotyczące górnego miasta zostaną jeszcze bardziej zaostrzone.\r\n\r\nStrażnicy strzegący bram nie będą przepuszczać nikogo kto nie posiada zezwolenia na wejście od miasta.\r\n\r\nWe wszystkich miastach i regionach królestwa zostaje wprowadzony stan wojenny.\r\n\r\nSędziowie cywilni zostają pozbawieni swych praw a ich obowiązki przejmuj królewscy paladyni.\r\n\r\nKażdy kto popełnił przestępstwo lub sprzeciwi się królewskiej straży podlega surowej krze.\r\n\r\nEgzekucją tego prawa zajmie się wielmożny lord Andre.\r\n\r\nKażdy mieszkaniec Khorinis, który popełnił jakiekolwiek wykroczenie ma obowiązek zgłosić się do lorda Andre.\r\n\r\nW związku z atakiem zagrażającym naszemu miastu ma obowiązek przygotować się do walki tak jak pozwala mu jego stan majątkowy, dotyczy to zaopatrzenia się w zbroję i oręż, a także natychmiastowe rozpoczęcie treningu bojowego.', '2019-03-24', '2019-03-31', 1, 1, 3),
+(2, 'Testowa krótka wiadomość. Proszę tego nie czytać. To służy tylko testowaniu aplikacji. yoyo', '2019-03-24', '2019-03-31', 2, 1, 0),
+(4, 'tututuutututu', '2019-03-01', '2019-03-30', 2, 1, 3),
+(5, 'pam pam pam ', '2019-03-13', '2019-03-29', 1, 1, 0),
+(6, 'ważna wiadmość', '2019-03-01', '2019-04-30', 1, 1, 2);
 
 -- --------------------------------------------------------
 
@@ -109,7 +128,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `login`, `password`, `email`, `name`, `power`, `last_login`) VALUES
-(1, 'damian', 'zamrix', 'damianzamroczynski@gmail.com', 'Damian', 10, '2019-03-27');
+(1, 'damian', 'zamrix', 'damianzamroczynski@gmail.com', 'Damian', 10, '2019-03-27'),
+(2, 'benek', 'franek', NULL, 'Benek', 0, '2019-03-29');
 
 --
 -- Indeksy dla zrzutów tabel
@@ -127,7 +147,7 @@ ALTER TABLE `expiry_date`
 --
 ALTER TABLE `messages`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `id_user` (`id_user`) USING BTREE;
+  ADD KEY `id_user` (`id_user`) USING BTREE;
 
 --
 -- Indeksy dla tabeli `products`
@@ -149,13 +169,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT dla tabeli `expiry_date`
 --
 ALTER TABLE `expiry_date`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT dla tabeli `messages`
 --
 ALTER TABLE `messages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT dla tabeli `products`
@@ -167,7 +187,7 @@ ALTER TABLE `products`
 -- AUTO_INCREMENT dla tabeli `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Ograniczenia dla zrzutów tabel

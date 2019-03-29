@@ -129,6 +129,7 @@ ol.messages li
 {
     text-align: justify;
     padding: 0 10px;
+    border-bottom: black solid 3px;
 }
 .messages_bar
 {
@@ -147,6 +148,7 @@ ol.messages ul li
     font-size: 12px;
     line-height: 200%;
     margin: 2px 10px;
+    border-bottom: none;
 }
 ul
 {
