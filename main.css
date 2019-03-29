@@ -37,12 +37,19 @@ ul.nav
     display: inline-block;
     padding: 0;
     margin: 0;
-    line-height: 200%;
+    line-height: 250%;
+    overflow: hidden;
 }
 ul.nav a
 {
     text-decoration: none;
     display: block;
+}
+li a.active
+{
+    background-color: #4d0303;
+    cursor: default;
+    
 }
 ul.nav  li
 {
@@ -51,6 +58,7 @@ ul.nav  li
     height: 40px;
     background-color: #220101;
     border-right: rgb(110, 1, 1) dashed 2px;
+    font-size: 18px;
 }
 ul.nav li.last
 {
@@ -59,6 +67,28 @@ ul.nav li.last
 ul.nav li:hover
 {
     background-color: #720e0e;
+}
+@media screen and (max-width: 600px)
+{
+    ul.nav li
+    {
+        float: none;
+        border-right: none;
+        border-bottom: black solid 4px;
+    }
+    ul.nav li:first-child
+    {
+        border-top: black solid 4px;
+    }
+    ul.nav li:last-child
+    {
+        border-bottom: black solid 4px;
+    }
+    .main_bar
+    {
+        background-color: #220101;
+    }
+
 }
 .main_page_form
 {
@@ -70,7 +100,8 @@ ul.nav li:hover
 {
     font-size: 20px;
     line-height: 200%;
-    height: 200px;
+    min-height: 300px;
+    overflow: hidden;
 }
 h2
 {
@@ -89,10 +120,34 @@ ol > li
     width: 50%;
     margin-left: auto;
     margin-right: auto;
+    
 }
 ol > li:nth-child(odd)
 {
     background-color: #220101;
+}
+ol.messages li
+{
+    text-align: justify;
+    padding: 0 10px;
+}
+.messages_bar
+{
+    width: 100%;
+    text-align: center;
+}
+ol.messages ul
+{
+    display: inline-block;
+    list-style: none;
+    text-align: center;
+}
+ol.messages ul li
+{
+    float: left;
+    font-size: 12px;
+    line-height: 200%;
+    margin: 2px 10px;
 }
 .login_area
 {

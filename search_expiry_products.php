@@ -1,10 +1,9 @@
 <?php
     session_start();
     require_once 'database_connection.php';
-    $today = new DateTime();
-    $today_string = $today->format('Y-m-d');
-    $today_query = 'SELECT expiry_date.id, expiry_date.date, products.name FROM expiry_date, products WHERE 
-    products.id=expiry_date.id_product AND expiry_date.date="'.$today_string.'" ORDER BY expiry_date.id';
+    $date_to_search = $_POST['date_to_search'];
+    $my_query = 'SELECT expiry_date.id, expiry_date.date, products.name FROM expiry_date, products WHERE 
+    products.id=expiry_date.id_product AND expiry_date.date="'.$date_to_search.'" ORDER BY expiry_date.id';
 ?>
 <!DOCTYPE HTML>
 <html lang="pl">
@@ -16,7 +15,6 @@
 
     <link rel="stylesheet" href="main.css" type="text/css" />
     <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"</scripts>
@@ -29,7 +27,7 @@
         </div>
         <div class="main_bar">
             <ul class="nav">
-                <li><a href="index.php" class="active">Terminy</a></li>
+                <li><a href="index.php">Terminy</a></li>
                 <li><a href="messages.php">Wiadomości</a></li>
                 <li class="last"><a href="log_in.php">Logowanie</a></li>
             </ul>
@@ -37,8 +35,8 @@
         <div class="result">
             <ol>
                 <?php
-                    echo "<h2>Produkty z datą przydatności do $today_string </h2>";
-                    $result = $db->query($today_query);
+                    echo "<h2>Produkty z datą przydatności do $date_to_search </h2>";
+                    $result = $db->query($my_query);
                     if ($result->rowCount() > 0)
                     {
                         foreach($result as $row) {
@@ -56,7 +54,7 @@
         </div>
         <div class="main_page_form">
             <form method="post" action="search_expiry_products.php" >
-                Podaj datę: <input type="date" name="date_to_search" value="<?= $today_string ?>" />
+                Podaj datę: <input type="date" name="date_to_search" value="<?= $date_to_search ?>" />
                 <input type="submit" value="Pokaż" />
             </form>
         </div>
