@@ -4,8 +4,8 @@
     $today = new DateTime();
     $today_string = $today->format('Y-m-d');
     $today_messages = 'SELECT messages.contents, messages.date_start, messages.date_end, users.name, messages.active, messages.rank 
-    FROM messages, users WHERE 
-    messages.id_user=users.id AND messages.date_end >= "'.$today_string.'" 
+    FROM messages INNER JOIN users ON messages.id_user=users.id 
+    WHERE messages.date_end >= "'.$today_string.'" 
     ORDER BY messages.rank DESC, messages.date_end ASC';
 ?>
 <!DOCTYPE HTML>

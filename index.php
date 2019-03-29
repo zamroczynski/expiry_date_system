@@ -3,8 +3,8 @@
     require_once 'database_connection.php';
     $today = new DateTime();
     $today_string = $today->format('Y-m-d');
-    $today_query = 'SELECT expiry_date.id, expiry_date.date, products.name FROM expiry_date, products WHERE 
-    products.id=expiry_date.id_product AND expiry_date.date="'.$today_string.'" ORDER BY expiry_date.id';
+    $today_query = 'SELECT expiry_date.id, expiry_date.date, products.name FROM expiry_date INNER JOIN products ON
+    products.id=expiry_date.id_product WHERE expiry_date.date="'.$today_string.'" ORDER BY expiry_date.id';
 ?>
 <!DOCTYPE HTML>
 <html lang="pl">

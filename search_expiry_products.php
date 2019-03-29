@@ -2,8 +2,8 @@
     session_start();
     require_once 'database_connection.php';
     $date_to_search = $_POST['date_to_search'];
-    $my_query = 'SELECT expiry_date.id, expiry_date.date, products.name FROM expiry_date, products WHERE 
-    products.id=expiry_date.id_product AND expiry_date.date="'.$date_to_search.'" ORDER BY expiry_date.id';
+    $my_query = 'SELECT expiry_date.id, expiry_date.date, products.name FROM expiry_date INNER JOIN products ON 
+    products.id=expiry_date.id_product WHERE expiry_date.date="'.$date_to_search.'" ORDER BY expiry_date.id';
 ?>
 <!DOCTYPE HTML>
 <html lang="pl">
