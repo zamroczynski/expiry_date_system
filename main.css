@@ -255,3 +255,14 @@ ul.adding > li > input
     grid-gap: 10px;
     background-color: #720e0e;
 }
+.error_div
+{
+    color: #ff0000;
+    font-weight: 600;
+    font-size: 18px;
+    text-decoration: underline;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 10px;
+}
