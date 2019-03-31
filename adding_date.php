@@ -1,6 +1,8 @@
 <?php
     session_start();
     require_once 'database_connection.php';
+    $today = new DateTime();
+    $today_string = $today->format('Y-m-d');
     if (!isset($_SESSION['logged']))
     {
         header('Location: log_in.php');
@@ -89,14 +91,14 @@
                 echo '<div class="result_grid">';
                 foreach($products as $row)
                 {
-                    echo '<div>';
+                    echo '<label class="my_radio_inputs">';
                     echo '<input type="radio" name="radio_name" value="'.$row['id'].'" />';
                     echo $row['name'];
-                    echo '</div>';
+                    echo '<span class="checkmark"></span></label>';
                 }
-                echo '<input type="date" name="expiry_date" />';
+                echo '';
                 echo '<div style="margin: 0 10px;"></div>';
-                echo '<input type="submit" value="Zapisz termin" /></div></form>';
+                echo '</div><input type="date" name="expiry_date" value="'.$today_string.'" /><input type="submit" value="Zapisz termin" /></form>';
                 echo "";
             }
             else

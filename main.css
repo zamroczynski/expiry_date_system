@@ -92,8 +92,6 @@ ul.nav li:hover
 .main_page_form
 {
     padding: 20px;
-    border-bottom: rgb(110, 1, 1) solid 2px;
-    
 }
 .result
 {
@@ -117,7 +115,7 @@ ol > li
     border-left: 5px solid rgb(0, 0, 0);
     border-right: 5px solid rgb(0, 0, 0);
     background-color: #131212;
-    width: 50%;
+    width: 80%;
     margin-left: auto;
     margin-right: auto;
     
@@ -162,7 +160,6 @@ ul
     margin-right: auto;
     margin-top: 15px;
     margin-bottom: 0;
-    border-bottom: rgb(110, 1, 1) solid 2px;
 }
 input
 {
@@ -176,6 +173,9 @@ input[type=text]
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
+}
+*:focus {
+    outline: none;
 }
 input[type=password]
 {
@@ -210,6 +210,7 @@ input[type=submit]:hover
 }
 .footer
 {
+    border-top: rgb(110, 1, 1) solid 2px;
     font-size: 12px;
     padding: 10px;
 }
@@ -220,7 +221,6 @@ input[type=submit]:hover
 }
 .hello_div
 {
-    border-bottom: rgb(110, 1, 1) solid 2px;
     padding-bottom: 20px;
     font-size: 12px;
 }
@@ -248,13 +248,16 @@ ul.adding > li > input
 {
     margin-left: 10px;
 }
-.result_gridt
+.result_grid
 {
+    margin: 10px auto;
     display: grid;
+    grid-gap: 1px;
     grid-template-columns: auto auto auto;
-    grid-gap: 10px;
-    background-color: #720e0e;
+    width: 80%;
+    font-size: 24px;
 }
+
 .error_div
 {
     color: #ff0000;
@@ -266,3 +269,15 @@ ul.adding > li > input
     margin-right: auto;
     margin-bottom: 10px;
 }
+.my_radio_inputs
+{
+    font-size: 22px;
+    background-color: #4d0303;
+    cursor: pointer;
+    padding: 10px;
+    text-align: justify;
+}
+.my_radio_inputs:hover
+{
+    background-color: #860a0a;
+} 

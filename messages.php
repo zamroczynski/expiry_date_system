@@ -76,12 +76,6 @@
                 ?>
             </ol>
         </div>
-        <div class="main_page_form">
-            <form method="post" action="search_expiry_products.php" >
-                Podaj datę: <input type="date" name="date_to_search" value="<?= $today_string ?>" />
-                <input type="submit" value="Pokaż" />
-            </form>
-        </div>
         <div class="footer">Termin <span style="color:green;">ONLINE</span> - Stacja 4449 Bydgoszcz by Damian Zamroczynski &copy; 2019 Kontakt: damianzamroczynski@gmail.com</div>
     </div>
 </body>
