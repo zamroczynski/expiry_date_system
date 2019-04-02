@@ -31,7 +31,7 @@
         <div class="main_bar">
             <ul class="nav">
                 <li><a href="adding_date.php">Dodaj terminy</a></li>
-                <li><a href="#">Edytuj terminy</a></li>
+                <li><a href="edit_date.php">Edytuj terminy</a></li>
                 <li><a href="#">Dodaj produkty</a></li>
                 <li><a href="#">Edytuj produkty</a></li>
                 <li><a href="#">Dodaj wiadomości</a></li>

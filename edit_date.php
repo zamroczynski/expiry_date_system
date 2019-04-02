@@ -1,54 +1,50 @@
 <?php
     session_start();
-    require_once 'database_connection.php';
-    $today = new DateTime();
-    $today_string = $today->format('Y-m-d');
     if (!isset($_SESSION['logged']))
     {
         header('Location: log_in.php');
         exit();
     }
+    require_once 'database_connection.php';
+    $today = new DateTime();
+    $today_string = $today->format('Y-m-d');
+    if (isset($_POST['product_name']))
+    {
+        $product_name = filter_input(INPUT_POST, 'product_name');
+        $product_query = $db->prepare('SELECT expiry_date.id, expiry_date.date, products.name 
+        FROM expiry_date INNER JOIN products ON products.id=expiry_date.id_product 
+        WHERE products.name LIKE "%'.$product_name.'%" ORDER BY expiry_date.date');
+    }
+    if (isset($_POST['date_to_delete']))
+    {
+        $date_to_delete = $_POST['radio_name'];
+        $delete_query = $db->query('DELETE FROM expiry_date WHERE expiry_date.id="'.$date_to_delete.'"');
+        $_SESSION['date_deleted'] = "Termin został usunięty";
+    }
+    if (isset($_POST['edit_date']))
+    {
+        $new_expiry_date = filter_input(INPUT_POST, 'edit_date');
+        $old_expiry_date = $_POST['radio_name'];
+        $edit_query = $db->query('UPDATE expiry_date 
+        SET date="'.$new_expiry_date.'" 
+        WHERE expiry_date.id="'.$old_expiry_date.'"');
+        $_SESSION['date_edited'] = "Termin został zmieniony!";
+    }
     $string_form_product_search = '
         <div class="adding_date_form">
-            <form method="POST" action="adding_date.php">
+            <form method="POST" action="edit_date.php">
                 <ul class="adding">
                 <li><input type="text" name="product_name" placeholder="Wpisz nazwę produktu" /></li>
                 <li><input type="submit" value="Wyszukaj" /></li>
                 </ul>
             </form>
         </div>';
-    if (isset($_POST['product_name']))
-    {
-        $product_name = filter_input(INPUT_POST, 'product_name');
-        $product_query = $db->prepare('SELECT products.id, products.name 
-        FROM products 
-        WHERE products.name LIKE "%'.$product_name.'%"');
-    }
-    if (isset($_POST['expiry_date']))
-    {
-        $expiry_date = filter_input(INPUT_POST, 'expiry_date');
-        $radio_choose = $_POST['radio_name'];
-        $expiry_test_query = $db->prepare('SELECT products.id, expiry_date.id_product, expiry_date.date 
-        FROM expiry_date INNER JOIN products ON products.id=expiry_date.id_product 
-        WHERE expiry_date.date="'.$expiry_date.'" AND products.id="'.$radio_choose.'"');
-        $expiry_test_query->execute();
-        if ($expiry_test_query->rowCount()>0)
-        {
-            $_SESSION['error'] = "Istnieje już taki termin!";
-        }
-        else
-        {
-            
-            $expiry_date_insert_query = $db->query('INSERT INTO expiry_date VALUES (null, '.$radio_choose.', "'.$expiry_date.'", null)');
-            $_SESSION['output_message'] = "Pomyślnie dodano nowy termin";
-        }
-    }
 ?>
 <!DOCTYPE HTML>
 <html lang="pl">
 <head>
 	<meta charset="utf-8" />
-	<title>Stacja Paliw 4449 - Dodawanie terminu</title>
+	<title>Stacja Paliw 4449 - Panel kontrolny</title>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 	<meta name="author" content="Damian Zamroczynski" />
 
@@ -68,8 +64,8 @@
         </div>
         <div class="main_bar">
             <ul class="nav">
-                <li><a href="adding_date.php" class="active">Dodaj terminy</a></li>
-                <li><a href="edit_date.php">Edytuj terminy</a></li>
+                <li><a href="adding_date.php">Dodaj terminy</a></li>
+                <li><a href="edit_date.php" class="active">Edytuj terminy</a></li>
                 <li><a href="#">Dodaj produkty</a></li>
                 <li><a href="#">Edytuj produkty</a></li>
                 <li><a href="#">Dodaj wiadomości</a></li>
@@ -78,27 +74,40 @@
                 <li class="last"><a href="log_out.php">Wyloguj się</a></li>
             </ul>
         </div>
-        
-        <?php
-        if (isset($_POST['product_name']))
-        {
-            $product_query->execute();
+            <?php
+            if (isset($_SESSION['date_deleted']))
+            {
+                echo '<h2>'.$_SESSION['date_deleted'].'</h2>';
+                unset($_SESSION['date_deleted']);
+            }
+            if (isset($_SESSION['date_edited']))
+            {
+                echo '<h2>'.$_SESSION['date_edited'].'</h2>';
+                unset($_SESSION['date_edited']);
+            }
+            if (isset($_POST['product_name']))
+            {
+                $product_query->execute();
             $products = $product_query->fetchAll();
             if ($products)
             {
                 
-                echo '<form method="post" action="adding_date.php">';
+                echo '<form method="post" action="edit_date.php">';
                 echo '<div class="result_grid">';
                 foreach($products as $row)
                 {
                     echo '<label class="my_radio_inputs">';
                     echo '<input type="radio" name="radio_name" value="'.$row['id'].'" />';
+                    echo $row['date']." ";
                     echo $row['name'];
                     echo '<span class="checkmark"></span></label>';
                 }
                 echo '';
                 echo '<div style="margin: 0 10px;"></div>';
-                echo '</div><input type="date" name="expiry_date" value="'.$today_string.'" /><input type="submit" value="Zapisz termin" /></form>';
+                echo '</div>';
+                echo '<input type="submit" name="date_to_delete" value="USUŃ TERMIN" />';
+                echo '<div></div>';
+                echo '<input type="date" name="edit_date" value="'.$today_string.'" /><input type="submit" value="Edytuj termin" /></form>';
                 echo "";
             }
             else
@@ -107,25 +116,15 @@
                 echo $string_form_product_search;
             }
             echo '</ol>';
-        }
-        else
-        {
-        echo '<h2>Dodawanie Terminu</h2>';
-        echo $string_form_product_search;
-        }
-        if (isset($_SESSION['error']))
-        {
-            echo '<div class="error_div">'.$_SESSION['error'].'</div>';
-            unset($_SESSION['error']);
-        }
-        if (isset($_SESSION['output_message']))
-        {
-            echo '<div class="output_message">'.$_SESSION['output_message'].'</div>';
-            unset($_SESSION['output_message']);
-        }
-        ?>
+            }
+            else
+            {
+                echo "<h2>Wyszukaj produkt dla którego chcesz zmienić datę</h2>";
+                echo $string_form_product_search;
+            }
+            ?>
+        </div>
         <div class="footer">Termin <span style="color:green;">ONLINE</span> - Stacja 4449 Bydgoszcz by Damian Zamroczynski &copy; 2019 Kontakt: damianzamroczynski@gmail.com</div>
     </div>
-    <?php unset($_POST['product_name']); unset($_POST['expiry_date']); ?>
 </body>
 </html>
