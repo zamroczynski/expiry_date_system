@@ -64,12 +64,28 @@
         </div>
         <div class="main_bar">
             <ul class="nav">
-                <li><a href="adding_date.php">Dodaj terminy</a></li>
-                <li><a href="edit_date.php" class="active">Edytuj terminy</a></li>
-                <li><a href="#">Dodaj produkty</a></li>
-                <li><a href="#">Edytuj produkty</a></li>
-                <li><a href="#">Dodaj wiadomości</a></li>
-                <li><a href="#">Edytuj wiadomości</a></li>
+            <li>
+                    <a href="#" class="active">Terminy</a>
+                    <ul>
+                        <li><a href="adding_date.php">Dodaj terminy</a></li>
+                        <li><a href="edit_date.php">Edytuj terminy</a></li>
+                    </ul>
+                </li>
+                
+                <li>
+                    <a href="#">Produkty</a>
+                    <ul>
+                        <li><a href="adding_products.php">Dodaj produkty</a></li>
+                        <li><a href="edit_products.php">Edytuj produkty</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">Wiadomości</a>
+                    <ul>
+                        <li><a href="adding_messages.php">Dodaj wiadomości</a></li>
+                        <li><a href="edit_messages.php">Edytuj wiadomości</a></li>
+                    </ul>
+                </li>
                 <li><a href="#">Profil</a></li>
                 <li class="last"><a href="log_out.php">Wyloguj się</a></li>
             </ul>

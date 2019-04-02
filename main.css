@@ -38,7 +38,10 @@ ul.nav
     padding: 0;
     margin: 0;
     line-height: 250%;
-    overflow: hidden;
+}
+ul.nav
+{
+    display: inline-block;
 }
 ul.nav a
 {
@@ -50,7 +53,7 @@ li a.active
     background-color: #4d0303;
     cursor: default;
 }
-ul.nav  li
+ul.nav > li
 {
     float: left;
     width: 150px;
@@ -86,6 +89,23 @@ ul.nav li:hover
     .main_bar
     {
         background-color: #220101;
+    }
+    ul.nav > li:hover > ul > li:first-child
+    {
+        border-top: none;
+    }
+    ul.nav > li:hover > ul > li
+    {
+        background-color: #000;
+    }
+    ul.nav > li > ul > li
+    {
+        position: absolute;
+        size: auto;
+    }
+    ul.nav > li > ul > li:hover
+    {
+        background-color: #720e0e;
     }
 }
 .main_page_form
@@ -222,6 +242,7 @@ input[type=submit]:hover
 {
     padding-bottom: 20px;
     font-size: 12px;
+    z-index: 1;
 }
 .hello_div > h2
 {
@@ -280,3 +301,29 @@ ul.adding > li > input
 {
     background-color: #860a0a;
 } 
+ul.nav > li > ul
+{
+    list-style-type: none;
+    display: none;
+    margin: 0;
+    padding: 0;
+    height: 40px;
+}
+ul.nav > li:hover > ul
+{
+    display: block;
+}
+ul.nav > li > ul > li
+{
+    background-color: #220101;
+    border-bottom: rgb(110, 1, 1) dashed 2px;
+    margin: 0;
+    padding: 1px;
+    z-index: 100;
+    position: relative;
+    font-size: 14px;
+}
+ul.nav > li > ul > li:last-child
+{
+    border-bottom: none;
+}
