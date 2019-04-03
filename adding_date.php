@@ -1,13 +1,13 @@
 <?php
     session_start();
-    require_once 'database_connection.php';
-    $today = new DateTime();
-    $today_string = $today->format('Y-m-d');
     if (!isset($_SESSION['logged']))
     {
         header('Location: log_in.php');
         exit();
     }
+    require_once 'database_connection.php';
+    $today = new DateTime();
+    $today_string = $today->format('Y-m-d');
     $string_form_product_search = '
         <div class="adding_date_form">
             <form method="POST" action="adding_date.php">
