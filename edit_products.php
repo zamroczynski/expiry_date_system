@@ -24,10 +24,20 @@
     if (isset($_POST['product_to_delete']))
     {
         $product_to_delete = $_POST['radio_name'];
-        $delete_query = $db->query('DELETE FROM products WHERE products.id="'.$product_to_delete.'"');
-        $_SESSION['product_deleted'] = "Produkt został usunięty";
+        $check_query_product = $db->query('SELECT expiry_date.id, expiry_date.date, products.name 
+        FROM expiry_date INNER JOIN products ON products.id=expiry_date.id_product 
+        WHERE expiry_date.id_product="'.$product_to_delete.'"'); 
+        if ($check_query_product->rowCount()>0)
+        {
+            $_SESSION['product_error'] = 'Dla podanego produktu istnieją terminy, usuwanie nie możlwe!';
+        }
+        else
+        {
+            $delete_query = $db->query('DELETE FROM products WHERE products.id="'.$product_to_delete.'"');
+            $_SESSION['product_deleted'] = "Produkt został usunięty";
+        }
     }
-    if (isset($_POST['edit_product_text']) && !strlen($_POST['edit_product_text']))
+    if (isset($_POST['edit_product_text']) && strlen($_POST['edit_product_text']) > 0)
     {
         $new_product_name = filter_input(INPUT_POST, 'edit_product_text');
         $old_product_name = $_POST['radio_name'];
@@ -116,10 +126,10 @@
                     echo '';
                     echo '<div style="margin: 0 10px;"></div>';
                     echo '</div>';
-                    echo '<input type="submit" name="product_to_delete" value="USUŃ PRODUKT" />';
                     echo '<div></div>';
-                    echo '<input type="text" name="edit_product_text" placeholder="Wprowadź nową nazwę" /><input type="submit" value="Edytuj produkt" /></form>';
-                    echo "";
+                    echo '<input type="text" name="edit_product_text" placeholder="Wprowadź nową nazwę" /> <input type="submit" value="Edytuj produkt" /></form>';
+                    echo '<div class="separator"></div>';
+                    echo '<input type="submit" name="product_to_delete" value="USUŃ PRODUKT" onclick="return  confirm(\'Czy napewno usunąć? \')" />';
                 }
                 else
                 {
@@ -131,6 +141,11 @@
         {
             echo '<h2>Wyszukaj produkt dla którego chcesz zmienić nazwę</h2>';
             echo $string_form_product_edit;
+        }
+        if (isset($_SESSION['product_deleted']))
+        {
+            echo '<h2>'.$_SESSION['product_error'].'</h2>';
+            unset($_SESSION['product_error']);
         }
         ?>
         <div class="footer">Termin <span style="color:green;">ONLINE</span> - Stacja 4449 Bydgoszcz by Damian Zamroczynski &copy; 2019 Kontakt: damianzamroczynski@gmail.com</div>

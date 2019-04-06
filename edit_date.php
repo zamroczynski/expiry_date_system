@@ -121,10 +121,11 @@
                     echo '';
                     echo '<div style="margin: 0 10px;"></div>';
                     echo '</div>';
-                    echo '<input type="submit" name="date_to_delete" value="USUŃ TERMIN" />';
+                    echo '';
                     echo '<div></div>';
                     echo '<input type="date" name="edit_date" value="'.$today_string.'" /><input type="submit" value="Edytuj termin" /></form>';
-                    echo "";
+                    echo '<div class="separator"></div>';
+                    echo '<input type="submit" name="date_to_delete" value="USUŃ TERMIN" onclick="return  confirm(\'Czy napewno usunąć? \')" />';
                 }
                 else
                 {

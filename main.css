@@ -25,7 +25,7 @@ a
 {
     margin-left: auto;
     margin-right: auto;
-    border-bottom: rgb(110, 1, 1) solid 2px;
+    border-bottom: rgb(100, 1, 1) solid 2px;
     padding-bottom: 5px;
     text-align: center;
     width: 100%;
@@ -326,4 +326,8 @@ ul.nav > li > ul > li
 ul.nav > li > ul > li:last-child
 {
     border-bottom: none;
+}
+.separator
+{
+    margin: 10px 0;
 }
