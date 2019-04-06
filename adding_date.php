@@ -5,6 +5,12 @@
         header('Location: log_in.php');
         exit();
     }
+    if($_SESSION['user_power']<2)
+    {
+        $_SESSION['acces_denied'] = '<div class="error_div">Brak dostępu!</div>';
+        header('Location: control_panel.php');
+        exit();
+    }
     require_once 'database_connection.php';
     $today = new DateTime();
     $today_string = $today->format('Y-m-d');

@@ -57,6 +57,13 @@
             </ul>
         </div>
         <div class="hello_div">
+            <?php
+            if (isset($_SESSION['acces_denied']))
+            {
+                echo $_SESSION['acces_denied'];
+                unset($_SESSION['acces_denied']);
+            }
+            ?>
             <h2>Witaj <?= $_SESSION['user_name'] ?> </h2>
             <p>Ranga: 
             <?php
