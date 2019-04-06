@@ -79,7 +79,7 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="#">Produkty</a>
+                    <a href="#" class="active">Produkty</a>
                     <ul>
                         <li><a href="adding_products.php">Dodaj produkty</a></li>
                         <li><a href="edit_products.php">Edytuj produkty</a></li>

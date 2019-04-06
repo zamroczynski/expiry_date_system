@@ -294,8 +294,8 @@ ul.adding > li > input
     font-size: 22px;
     background-color: #4d0303;
     cursor: pointer;
-    padding: 10px;
-    text-align: justify;
+    padding: 20px;
+    text-align: center;
 }
 .my_radio_inputs:hover
 {
@@ -330,4 +330,43 @@ ul.nav > li > ul > li:last-child
 .separator
 {
     margin: 10px 0;
+}
+ul.adding > li > textarea
+{
+    width: 80%;
+    min-height: 200px;
+    resize: horizontal;
+    text-align: left;
+    margin: 0;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 18px;
+}
+ul.adding > li > input[type=submit]
+{
+    margin-top: 10px;
+    height: 50px;
+    font-size: 28px;
+    width: 200px;
+}
+ul.adding > li > input[type=date]
+{
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    width: 10%;
+}
+ul.adding > li.date
+{
+    position: relative;
+    display: inline;
+}
+option
+{
+    text-transform: uppercase;
+    font-size: 12px;
 }
