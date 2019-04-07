@@ -358,7 +358,7 @@ ul.adding > li > input[type=date]
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
-    width: 10%;
+    width: 135px;
 }
 ul.adding > li.date
 {
