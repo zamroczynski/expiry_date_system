@@ -5,13 +5,20 @@
         header('Location: log_in.php');
         exit();
     }
-    if($_SESSION['user_power']<6)
+    if($_SESSION['user_power']<2)
     {
         $_SESSION['acces_denied'] = '<div class="error_div">Brak dostępu!</div>';
         header('Location: control_panel.php');
         exit();
     }
     require_once 'database_connection.php';
+    if($_SESSION['user_power']>=2 && $_SESSION['user_power']<=6)
+    {
+        $user_messages = $db->query('SELECT messages.contents, messages.date_start, messages.date_end, messages.rank, 
+                                    users.name, messages.id 
+                                    FROM messages INNER JOIN users ON users.id=messages.id_user 
+                                    WHERE users.id='.$_SESSION['user_id'].'');
+    }
     if($_SESSION['user_power']>6)
     {
         $all_messages = $db->query('SELECT messages.contents, messages.date_start, messages.date_end, messages.rank, 
@@ -45,7 +52,7 @@
                 </select>
                 </li>
                 <li><input type="hidden" name="id_message" value="'.$message.'" />
-                <input type="submit" value="Dodaj" /></li>
+                <input type="submit" value="Zmień" /></li>
                 </ul>
             </form>
         </div>';
@@ -53,12 +60,12 @@
     }
     if (isset($_POST['new_message']))
     {
+        echo 'test test raz dwa trze';
         $id_message = filter_input(INPUT_POST, 'id_message');
         $message = filter_input(INPUT_POST, 'new_message');
         $new_message = nl2br($message);
         $first_date = filter_input(INPUT_POST, 'first_date');
         $last_date = filter_input(INPUT_POST, 'last_date');
-        $user = $_SESSION['user_id'];
         $rank = filter_input(INPUT_POST,'rank');
         $message_query=$db->prepare('UPDATE messages 
             SET contents=":message", date_start="'.$first_date.'", date_end="'.$last_date.'", rank="'.$rank.'" 
@@ -71,7 +78,7 @@
 <html lang="pl">
 <head>
 	<meta charset="utf-8" />
-	<title>Stacja Paliw 4449 - Dodawanie produktu</title>
+	<title>Stacja Paliw 4449 - Edycja wiadomości</title>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 	<meta name="author" content="Damian Zamroczynski" />
 
@@ -162,7 +169,43 @@
             {
                 echo '<h2>Brak wiadomości!</h2>';
             }
-            
+        }
+        else
+        {
+            if ($user_messages->rowCount()>0)
+            {
+                echo '<h2>Wszystkie Twoje wiadomości od najstarszych:</h2>';
+                foreach ($user_messages as $row)
+                {
+                    echo '<li><form action="edit_messages.php" method="POST">';
+                    echo '<div class="messages_bar">';
+                    echo "<ul>";
+                    echo '<li> <input type="hidden" name="message_id" value="'.$row['id'].'" />';
+                    echo "Napisał: ";
+                    print_r($row['name']);
+                    echo "</li>";
+                    echo "<li>";
+                    echo "Obowiązuje od ";
+                    print_r($row['date_start']);
+                    echo " do ";
+                    print_r($row['date_end']);
+                    echo "</li>";
+                    echo "<li>";
+                    if ($row['rank']>=3) echo '<div style="color:red;text-transform: uppercase;">Bardzo ważna wiadomość!</div>';
+                    if ($row['rank']==2) echo '<div style="color:#ff6666;">Ważna wiadomość!</div>';
+                    echo '';
+                    echo "</li>";
+                    echo '<li><input type="submit" name="delete_message" value="USUŃ" /></li>';
+                    echo '<li><input type="submit" name="edit_message" value="EDYTUJ" /></li>';
+                    echo "</ul></div>";
+                    print_r($row['contents']);
+                    echo "</form></li>";
+                }
+            }
+            else
+            {
+                echo '<h2>Brak wiadomości!</h2>';
+            }
         }
         ?>
         </ol>
