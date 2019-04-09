@@ -5,6 +5,20 @@
         header('Location: log_in.php');
         exit();
     }
+    $today = new DateTime();
+    $today_string = $today->format('Y-m-d');
+    if(isset($_POST['date_start']))
+    {
+        $date_start = filter_input(INPUT_POST, 'date_start');
+        $date_end = filter_input(INPUT_POST, 'date_end');
+        $report = $db->prepare('SELECT expiry_date.date, products.name 
+                                FROM expiry_date INNER JOIN products ON products.id=expiry_date.id_product 
+                                WHERE expiry_date.date >= :dateStart && expiry_date.date <= :dateEnd');
+        $report->bindValue(':dateStart', $date_start, PDO::PARAM_STR);
+        $report->bindValue(':dateEnd', $date_end, PDO::PARAM_STR);
+        $report->execute();
+        $_SESSION['report_ready'] = true;
+    }
 ?>
 <!DOCTYPE HTML>
 <html lang="pl">
@@ -57,7 +71,49 @@
                 <li class="last"><a href="log_out.php">Wyloguj się</a></li>
             </ul>
         </div>
-        
+        <div class="generate_report">
+            <h2>Generator terminów</h2>
+            <form action="generate_report.php" method="POST">
+                <label>
+                    Wybierz datę początkową: 
+                    <input type="date" name="date_start" value="<?= $today_string ?>" />
+                </label>
+                <label>
+                    oraz datę końcową: 
+                    <input type="date" name="date_end" value="<?= $today_string ?>" />
+                </label>
+                <input type="submit" value="Generuj" />
+            </form>
+            <?php
+            if(isset($_SESSION['report_ready']))
+            {
+                if($report->rowCount()>0)
+                {
+                    echo '
+                    <table>
+                        <tr>
+                            <td>Nazwa</td>
+                            <td>Ilosc</td>
+                        </tr>';
+                    foreach ($report as $row)
+                    {
+                        echo '
+                        
+                        <tr>
+                            <td>'.$row['name'].'</td>
+                            <td></td>
+                        </tr>';
+                    }
+                    echo '</table>';
+                }
+                else
+                {
+                    echo 'Brak wyników!';
+                }
+                unset($_SESSION['report_ready']);
+            }
+            ?>
+        </div>
         <div class="footer">Termin <span style="color:green;">ONLINE</span> - Stacja 4449 Bydgoszcz by Damian Zamroczynski &copy; 2019 Kontakt: damianzamroczynski@gmail.com</div>
     </div>
 </body>

@@ -370,3 +370,18 @@ option
     text-transform: uppercase;
     font-size: 12px;
 }
+.generate_report
+{
+    min-height: 300px;
+    margin: 20px 0;
+}
+.generate_report > label
+{
+    padding: 20px;
+}
+.generate_report > ul > li
+{
+    position: relative;
+    display: inline-block;
+    margin: 20px;
+}
