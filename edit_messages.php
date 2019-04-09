@@ -12,18 +12,19 @@
         exit();
     }
     require_once 'database_connection.php';
-    if($_SESSION['user_power']>=2 && $_SESSION['user_power']<=6)
-    {
-        $user_messages = $db->query('SELECT messages.contents, messages.date_start, messages.date_end, messages.rank, 
-                                    users.name, messages.id 
-                                    FROM messages INNER JOIN users ON users.id=messages.id_user 
-                                    WHERE users.id='.$_SESSION['user_id'].'');
-    }
     if($_SESSION['user_power']>6)
     {
         $all_messages = $db->query('SELECT messages.contents, messages.date_start, messages.date_end, messages.rank, 
                                     users.name, messages.id 
                                     FROM messages INNER JOIN users ON users.id=messages.id_user 
+                                    ORDER BY messages.date_end');
+    }
+    if($_SESSION['user_power']<=6 && $_SESSION['user_power']>=2)
+    {
+        $user_messages = $db->query('SELECT messages.contents, messages.date_start, messages.date_end, messages.rank, 
+                                    users.name, messages.id 
+                                    FROM messages INNER JOIN users ON users.id=messages.id_user 
+                                    WHERE users.id='.$_SESSION['user_id'].' 
                                     ORDER BY messages.date_end');
     }
     if (isset($_POST['delete_message']))
@@ -35,7 +36,8 @@
     if (isset($_POST['edit_message']))
     {
         $message = filter_input(INPUT_POST, 'message_id');
-        $edit_message = $db->query('SELECT messages.contents, messages.date_start, messages.date_end FROM messages WHERE messages.id="'.$message.'"');
+        $edit_message = $db->query('SELECT messages.contents, messages.date_start, messages.date_end 
+                                    FROM messages WHERE messages.id="'.$message.'"');
         $row = $edit_message->fetch();
         $string_form_message_adding = '
         <div class="adding_message_form">
@@ -44,23 +46,24 @@
                 <li class="date">Obowiązuje od <input type="date" name="first_date" value="'.$row['date_start'].'" ></li>
                 <li class="date"> do <input type="date" name="last_date" value="'.$row['date_end'].'" ></li>
                 <li><textarea name="new_message" >'.$row['contents'].'</textarea></li>
-                <li>Jak ważna to wiadomość?
+                <li>
+                Jak ważna to wiadomość?
                 <select name="rank">
                 <option value="3">BARDZO WAŻNA WIADOMOŚĆ!</option>
                 <option value="2">Ważna wiadmość!</option>
                 <option value="1">Zwykła wiadomość</option>
                 </select>
                 </li>
-                <li><input type="hidden" name="id_message" value="'.$message.'" />
-                <input type="submit" value="Zmień" /></li>
+                <li><input type="hidden" name="id_message" value="'.$message.'" /></li>
+                <li><input type="submit" value="Zmień" /></li>
                 </ul>
             </form>
         </div>';
-        $_SESSION['edit_string'] = $string_form_message_adding;
+        $_SESSION['edit_string'] = true;
     }
-    if (isset($_POST['new_message']))
+    if (isset($_POST['id_message']))
     {
-        echo 'test test raz dwa trze';
+        echo 'raz dwa trzy';
         $id_message = filter_input(INPUT_POST, 'id_message');
         $message = filter_input(INPUT_POST, 'new_message');
         $new_message = nl2br($message);
@@ -68,9 +71,10 @@
         $last_date = filter_input(INPUT_POST, 'last_date');
         $rank = filter_input(INPUT_POST,'rank');
         $message_query=$db->prepare('UPDATE messages 
-            SET contents=":message", date_start="'.$first_date.'", date_end="'.$last_date.'", rank="'.$rank.'" 
-            WHERE id="'.$id_message.'"');
-        $message_query->execute(array(':message' => $new_message));
+            SET contents=:message, date_start="'.$first_date.'", date_end="'.$last_date.'", rank="'.$rank.'" 
+            WHERE id='.$id_message);
+        $message_query->bindValue(':message', $new_message, PDO::PARAM_STR);
+        $message_query->execute();
         header('Location: edit_messages.php');
     }
 ?>
@@ -78,7 +82,7 @@
 <html lang="pl">
 <head>
 	<meta charset="utf-8" />
-	<title>Stacja Paliw 4449 - Edycja wiadomości</title>
+	<title>Stacja Paliw 4449 - Dodawanie produktu</title>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 	<meta name="author" content="Damian Zamroczynski" />
 
@@ -126,7 +130,7 @@
         <?php
         if(isset($_SESSION['edit_string']))
         {
-            echo $_SESSION['edit_string'];
+            echo $string_form_message_adding;
             unset($_SESSION['edit_string']);
         }
         ?>
@@ -174,7 +178,7 @@
         {
             if ($user_messages->rowCount()>0)
             {
-                echo '<h2>Wszystkie Twoje wiadomości od najstarszych:</h2>';
+                echo '<h2>Wszystkie wiadomości od najstarszych:</h2>';
                 foreach ($user_messages as $row)
                 {
                     echo '<li><form action="edit_messages.php" method="POST">';

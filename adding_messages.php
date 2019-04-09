@@ -44,21 +44,24 @@
         if($_SESSION['user_power']>=6)
         {
             $message_query=$db->prepare('INSERT INTO messages VALUES 
-            (null, "'.$message.'", "'.$first_date.'", "'.$last_date.'", "'.$user.'", 1, '.$rank.')');
+            (null, :message, "'.$first_date.'", "'.$last_date.'", "'.$user.'", 1, '.$rank.')');
+            $message_query->bindValue(':message', $message, PDO::PARAM_STR);
             $message_query->execute();
             $_SESSION['message_sent'] = 'Wiadomość wysłana!';
         }
         else if($_SESSION['user_power']<=2 && $rank<=1)
         {
             $message_query=$db->prepare('INSERT INTO messages VALUES 
-            (null, "'.$message.'", "'.$first_date.'", "'.$last_date.'", "'.$user.'", 1, '.$rank.')');
+            (null, :message, "'.$first_date.'", "'.$last_date.'", "'.$user.'", 1, '.$rank.')');
+            $message_query->bindValue(':message', $message, PDO::PARAM_STR);
             $message_query->execute();
             $_SESSION['message_sent'] = 'Wiadomość wysłana!';
         }
         else if ($_SESSION['user_power']<6 && $_SESSION['user_power']>2)
         {
             $message_query=$db->prepare('INSERT INTO messages VALUES 
-            (null, "'.$message.'", "'.$first_date.'", "'.$last_date.'", "'.$user.'", 1, '.$rank.')');
+            (null, :message, "'.$first_date.'", "'.$last_date.'", "'.$user.'", 1, '.$rank.')');
+            $message_query->bindValue(':message', $message, PDO::PARAM_STR);
             $message_query->execute();
             $_SESSION['message_sent'] = 'Wiadomość wysłana!';
         }
