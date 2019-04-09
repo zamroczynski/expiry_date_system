@@ -79,6 +79,7 @@
                     <ul>
                         <li><a href="adding_date.php">Dodaj terminy</a></li>
                         <li><a href="edit_date.php">Edytuj terminy</a></li>
+                        <li><a href="generate_report.php">Generuj Raport</a></li>
                     </ul>
                 </li>
                 

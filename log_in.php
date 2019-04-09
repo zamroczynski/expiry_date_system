@@ -28,7 +28,7 @@
             $today = new DateTime();
             $today_string = $today->format('Y-m-d H:i:s');
             $db->query('UPDATE users SET last_login="'.$today_string.'"');
-            header('Location: control_panel.php');
+            header('Location: user_profile.php');
             exit();
         }
         else
