@@ -2,7 +2,7 @@
     session_start();
     if (isset($_SESSION['logged']))
     {
-        header('Location: control_panel.php');
+        header('Location: user_profile.php');
         exit();
     }
     if ((isset($_POST['login'])) || (isset($_POST['password'])))

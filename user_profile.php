@@ -52,7 +52,7 @@
                         <li><a href="edit_messages.php">Edytuj wiadomości</a></li>
                     </ul>
                 </li>
-                <li><a href="#">Profil</a></li>
+                <li><a href="user_profile.php" class="active">Profil</a></li>
                 <li class="last"><a href="log_out.php">Wyloguj się</a></li>
             </ul>
         </div>

@@ -8,7 +8,7 @@
     if($_SESSION['user_power']<2)
     {
         $_SESSION['acces_denied'] = '<div class="error_div">Brak dostępu!</div>';
-        header('Location: control_panel.php');
+        header('Location: user_profile.php');
         exit();
     }
     require_once 'database_connection.php';
