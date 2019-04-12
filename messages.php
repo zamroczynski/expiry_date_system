@@ -49,7 +49,7 @@
                                 echo '<div class="messages_bar">';
                                 echo "<ul>";
                                 echo "<li>";
-                                echo "Napisał: ";
+                                echo "Napisał(a): ";
                                 print_r($row['name']);
                                 echo "</li>";
                                 echo "<li>";

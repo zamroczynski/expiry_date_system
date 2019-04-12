@@ -134,9 +134,9 @@
                     echo '<div style="margin: 0 10px;"></div>';
                     echo '</div>';
                     echo '<div></div>';
-                    echo '<input type="text" name="edit_product_text" placeholder="Wprowadź nową nazwę" /> <input type="submit" value="Edytuj produkt" /></form>';
+                    echo '<input type="text" name="edit_product_text" placeholder="Wprowadź nową nazwę" /> <input type="submit" value="Edytuj produkt" />';
                     echo '<div class="separator"></div>';
-                    echo '<input type="submit" name="product_to_delete" value="USUŃ PRODUKT" onclick="return  confirm(\'Czy napewno usunąć? \')" />';
+                    echo '<input type="submit" name="product_to_delete" value="USUŃ PRODUKT" onclick="return  confirm(\'Czy napewno usunąć? \')" /></form>';
                 }
                 else
                 {

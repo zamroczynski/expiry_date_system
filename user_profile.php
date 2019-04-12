@@ -70,6 +70,7 @@
             <?php
                 if($_SESSION['user_power'] == 10) echo 'Admin';
                 if($_SESSION['user_power'] == 8) echo 'Prowadzący Stacje';
+                if($_SESSION['user_power'] == 7) echo 'Zastępca PSP';
                 if($_SESSION['user_power'] == 6) echo 'Instruktor';
                 if($_SESSION['user_power'] == 4) echo 'Prowadzący zmianę';
                 if($_SESSION['user_power'] == 2) echo 'Pracownik';

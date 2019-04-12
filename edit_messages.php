@@ -149,7 +149,7 @@
                     echo '<div class="messages_bar">';
                     echo "<ul>";
                     echo '<li> <input type="hidden" name="message_id" value="'.$row['id'].'" />';
-                    echo "Napisał: ";
+                    echo "Napisał(a): ";
                     print_r($row['name']);
                     echo "</li>";
                     echo "<li>";
