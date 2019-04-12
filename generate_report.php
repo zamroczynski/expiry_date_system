@@ -7,6 +7,7 @@
     }
     $today = new DateTime();
     $today_string = $today->format('Y-m-d');
+    require_once 'database_connection.php';
     if(isset($_POST['date_start']))
     {
         $date_start = filter_input(INPUT_POST, 'date_start');
@@ -31,7 +32,8 @@
     <link rel="stylesheet" href="main.css" type="text/css" />
     <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <script src="https://code.jquery.com/jquery-3.4.0.min.js"></script>
+    <script src="js/jquery.tableToExcel.js"></script>
     <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"</scripts>
     <![endif]-->
@@ -90,8 +92,9 @@
                 if($report->rowCount()>0)
                 {
                     echo '
-                    <table>
+                    <table id="date_table">
                         <tr>
+                            <td>Data</td>
                             <td>Nazwa</td>
                             <td>Ilosc</td>
                         </tr>';
@@ -100,11 +103,16 @@
                         echo '
                         
                         <tr>
+                            <td>'.$row['date'].'</td>
                             <td>'.$row['name'].'</td>
                             <td></td>
                         </tr>';
                     }
+                    
                     echo '</table>';
+                    echo '
+                    <button id="excel">Generuj w excelu</button>
+                    ';
                 }
                 else
                 {
@@ -116,5 +124,10 @@
         </div>
         <div class="footer">Termin <span style="color:green;">ONLINE</span> - Stacja 4449 Bydgoszcz by Damian Zamroczynski &copy; 2019 Kontakt: damianzamroczynski@gmail.com</div>
     </div>
+    <script>
+        $('button').click(function (){
+            $('table').tblToExcel();
+        });
+    </script>
 </body>
 </html>

@@ -385,3 +385,14 @@ option
     display: inline-block;
     margin: 20px;
 }
+table
+{
+    text-align: center;
+    border: rgb(110, 1, 1) solid 1px;
+    margin: 0 auto;
+    border-collapse: collapse;
+}
+td, th
+{
+    border: 1px solid rgb(110, 1, 1);
+}
