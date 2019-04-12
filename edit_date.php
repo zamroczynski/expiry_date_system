@@ -103,7 +103,7 @@
                 echo '<h2>'.$_SESSION['date_deleted'].'</h2>';
                 unset($_SESSION['date_deleted']);
             }
-            if (isset($_SESSION['date_edited']))
+            else if (isset($_SESSION['date_edited']))
             {
                 echo '<h2>'.$_SESSION['date_edited'].'</h2>';
                 unset($_SESSION['date_edited']);
@@ -130,9 +130,9 @@
                     echo '</div>';
                     echo '';
                     echo '<div></div>';
-                    echo '<input type="date" name="edit_date" value="'.$today_string.'" /><input type="submit" value="Edytuj termin" /></form>';
+                    echo '<input type="date" name="edit_date" value="'.$today_string.'" /><input type="submit" value="Edytuj termin" />';
                     echo '<div class="separator"></div>';
-                    echo '<input type="submit" name="date_to_delete" value="USUŃ TERMIN" onclick="return  confirm(\'Czy napewno usunąć? \')" />';
+                    echo '<input type="submit" name="date_to_delete" value="USUŃ TERMIN" onclick="return  confirm(\'Czy napewno usunąć? \')" /></form>';
                 }
                 else
                 {
