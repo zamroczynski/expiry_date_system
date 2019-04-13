@@ -41,7 +41,7 @@
         $row = $edit_message->fetch();
         $string_form_message_adding = '
         <div class="adding_message_form">
-            <form method="POST" action="edit_messages.php">
+            <form method="POST">
                 <ul class="adding">
                 <li class="date">Obowiązuje od <input type="date" name="first_date" value="'.$row['date_start'].'" ></li>
                 <li class="date"> do <input type="date" name="last_date" value="'.$row['date_end'].'" ></li>
@@ -174,7 +174,7 @@
                 echo '<h2>Wszystkie wiadomości od najstarszych:</h2>';
                 foreach ($all_messages as $row)
                 {
-                    echo '<li><form action="edit_messages.php" method="POST">';
+                    echo '<li><form method="POST">';
                     echo '<div class="messages_bar">';
                     echo "<ul>";
                     echo '<li> <input type="hidden" name="message_id" value="'.$row['id'].'" />';
@@ -211,7 +211,7 @@
                 echo '<h2>Wszystkie wiadomości od najstarszych:</h2>';
                 foreach ($user_messages as $row)
                 {
-                    echo '<li><form action="edit_messages.php" method="POST">';
+                    echo '<li><form method="POST">';
                     echo '<div class="messages_bar">';
                     echo "<ul>";
                     echo '<li> <input type="hidden" name="message_id" value="'.$row['id'].'" />';

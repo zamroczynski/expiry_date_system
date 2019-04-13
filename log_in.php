@@ -68,7 +68,7 @@
         <div class="login_area">
             <ul class="login">
                 <div style="margin-left:auto; margin-right:auto; margin-bottom:5px;">LOGOWANIE</div>
-                    <form action="log_in.php" method="post">
+                    <form method="post">
                         <li><input type="text" name="login" placeholder="Twój login..." /></li>
                         <li><input type="password" name="password" placeholder="Twoje hasło..." /></li>
                         <li><input type="submit" value="Zaloguj się!" /></li>

@@ -14,7 +14,7 @@
     require_once 'database_connection.php';
     $string_form_product_edit = '
         <div class="adding_date_form">
-            <form method="POST" action="edit_products.php">
+            <form method="POST">
                 <ul class="adding">
                 <li><input type="text" name="product_name" placeholder="Wpisz nazwę produktu" /></li>
                 <li><input type="submit" value="Szukaj" /></li>
@@ -121,7 +121,7 @@
             if ($products)
                 {
                     
-                    echo '<form method="post" action="edit_products.php">';
+                    echo '<form method="post">';
                     echo '<div class="result_grid">';
                     foreach($products as $row)
                     {

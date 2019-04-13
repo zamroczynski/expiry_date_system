@@ -53,7 +53,7 @@
             </ol>
         </div>
         <div class="main_page_form">
-            <form method="post" action="search_expiry_products.php" >
+            <form method="post">
                 Podaj datę: <input type="date" name="date_to_search" value="<?= $date_to_search ?>" />
                 <input type="submit" value="Pokaż" />
             </form>

@@ -25,7 +25,7 @@
 <html lang="pl">
 <head>
 	<meta charset="utf-8" />
-	<title>Stacja Paliw 4449 - Mój profil</title>
+	<title>Stacja Paliw 4449 - Raporty</title>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 	<meta name="author" content="Damian Zamroczynski" />
 
@@ -75,7 +75,7 @@
         </div>
         <div class="generate_report">
             <h2>Generator terminów</h2>
-            <form action="generate_report.php" method="POST">
+            <form method="POST">
                 <label>
                     Wybierz datę początkową: 
                     <input type="date" name="date_start" value="<?= $today_string ?>" />

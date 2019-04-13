@@ -16,7 +16,7 @@
     $today_string = $today->format('Y-m-d');
     $string_form_product_search = '
         <div class="adding_date_form">
-            <form method="POST" action="adding_date.php">
+            <form method="POST">
                 <ul class="adding">
                 <li><input type="text" name="product_name" placeholder="Wpisz nazwę produktu" /></li>
                 <li><input type="submit" value="Wyszukaj" /></li>
@@ -110,7 +110,7 @@
             if ($products)
             {
                 
-                echo '<form method="post" action="adding_date.php">';
+                echo '<form method="post">';
                 echo '<div class="result_grid">';
                 foreach($products as $row)
                 {

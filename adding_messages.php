@@ -17,7 +17,7 @@
 
     $string_form_message_adding = '
         <div class="adding_message_form">
-            <form method="POST" action="adding_messages.php">
+            <form method="POST">
                 <ul class="adding">
                 <li class="date">Obowiązuje od <input type="date" name="first_date" value="'.$today_string.'" ></li>
                 <li class="date"> do <input type="date" name="last_date" value="'.$today_string.'" ></li>
