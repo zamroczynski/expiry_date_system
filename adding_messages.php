@@ -47,7 +47,7 @@
             (null, :message, "'.$first_date.'", "'.$last_date.'", "'.$user.'", 1, '.$rank.')');
             $message_query->bindValue(':message', $message, PDO::PARAM_STR);
             $message_query->execute();
-            $_SESSION['message_sent'] = 'Wiadomość wysłana!';
+            $_SESSION['message_sent'] = '<div class="ok">Wiadomość wysłana!</div>';
         }
         else if($_SESSION['user_power']<=2 && $rank<=1)
         {
@@ -55,7 +55,7 @@
             (null, :message, "'.$first_date.'", "'.$last_date.'", "'.$user.'", 1, '.$rank.')');
             $message_query->bindValue(':message', $message, PDO::PARAM_STR);
             $message_query->execute();
-            $_SESSION['message_sent'] = 'Wiadomość wysłana!';
+            $_SESSION['message_sent'] = '<div class="ok">Wiadomość wysłana!</div>';
         }
         else if ($_SESSION['user_power']<6 && $_SESSION['user_power']>2 && $rank<3)
         {
@@ -63,11 +63,11 @@
             (null, :message, "'.$first_date.'", "'.$last_date.'", "'.$user.'", 1, '.$rank.')');
             $message_query->bindValue(':message', $message, PDO::PARAM_STR);
             $message_query->execute();
-            $_SESSION['message_sent'] = 'Wiadomość wysłana!';
+            $_SESSION['message_sent'] = '<div class="ok">Wiadomość wysłana!</div>';
         }
         else
         {
-            $_SESSION['message_error'] = 'Brak uprawnień!';
+            $_SESSION['message_error'] = '<div class="error_div">Brak uprawnień!</div>';
         }
     }
 ?>

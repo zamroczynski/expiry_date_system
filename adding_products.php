@@ -41,7 +41,7 @@
             {
                 $product_add_query = $db->prepare('INSERT INTO products (id, name, ean_code) VALUES (null, \''.$product_name.'\', null)');
                 $product_add_query->execute();
-                $_SESSION['product'] = 'Pomyślnie dodano produkt';
+                $_SESSION['product'] = '<div class="ok">Pomyślnie dodano produkt</div>';
             }
         }
     }

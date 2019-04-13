@@ -98,7 +98,7 @@
         }
         else
         {
-            $_SESSION['message_error'] = 'Brak uprawnień!';
+            $_SESSION['message_error'] = '<div class="error_div>"Brak uprawnień!</div>';
         }
     }
 ?>

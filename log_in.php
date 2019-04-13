@@ -33,7 +33,7 @@
         }
         else
         {
-            $_SESSION['login_error'] = "Nie prawidłowy login lub hasło";
+            $_SESSION['login_error'] = '<div class="error_div">Nie prawidłowy login lub hasło</div>';
         }
     }
 ?>

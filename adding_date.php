@@ -40,13 +40,13 @@
         $expiry_test_query->execute();
         if ($expiry_test_query->rowCount()>0)
         {
-            $_SESSION['error'] = "Istnieje już taki termin!";
+            $_SESSION['error'] = '<div class="error_div">Istnieje już taki termin!</div>';
         }
         else
         {
             
             $expiry_date_insert_query = $db->query('INSERT INTO expiry_date VALUES (null, '.$radio_choose.', "'.$expiry_date.'", null)');
-            $_SESSION['output_message'] = "Pomyślnie dodano nowy termin";
+            $_SESSION['output_message'] = '<div class="ok">Pomyślnie dodano nowy termin</div>';
         }
     }
 ?>
@@ -143,7 +143,7 @@
         }
         if (isset($_SESSION['output_message']))
         {
-            echo '<div class="output_message">'.$_SESSION['output_message'].'</div>';
+            echo '<div class="ok">'.$_SESSION['output_message'].'</div>';
             unset($_SESSION['output_message']);
         }
         ?>

@@ -10,7 +10,7 @@
     }
     catch (PDOException $error_message)
     {
-        echo $error_message->getMessage(); //admin error style
-        //exit('Datebase error!'); //user error style
+        //echo $error_message->getMessage(); //admin error style
+        exit('Błąd krytyczny bazy danych! Skontaktuj się z Damianem'); //user error style
     }
 ?>

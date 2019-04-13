@@ -25,7 +25,7 @@
     {
         $date_to_delete = $_POST['radio_name'];
         $delete_query = $db->query('DELETE FROM expiry_date WHERE expiry_date.id="'.$date_to_delete.'"');
-        $_SESSION['date_deleted'] = "Termin został usunięty";
+        $_SESSION['date_deleted'] = '<div class="ok">Termin został usunięty</div>';
     }
     if (isset($_POST['edit_date']))
     {
@@ -34,7 +34,7 @@
         $edit_query = $db->query('UPDATE expiry_date 
         SET date="'.$new_expiry_date.'" 
         WHERE expiry_date.id="'.$old_expiry_date.'"');
-        $_SESSION['date_edited'] = "Termin został zmieniony!";
+        $_SESSION['date_edited'] = '<div class="ok">Termin został zmieniony!</div>';
     }
     $string_form_product_search = '
         <div class="adding_date_form">

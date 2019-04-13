@@ -35,12 +35,12 @@
         WHERE expiry_date.id_product="'.$product_to_delete.'"'); 
         if ($check_query_product->rowCount()>0)
         {
-            $_SESSION['product_error'] = 'Dla podanego produktu istnieją terminy, usuwanie nie możlwe!';
+            $_SESSION['product_error'] = '<div class="error_div">Dla podanego produktu istnieją terminy, usuń najpierw terminy dla tego produktu!</div>';
         }
         else
         {
             $delete_query = $db->query('DELETE FROM products WHERE products.id="'.$product_to_delete.'"');
-            $_SESSION['product_deleted'] = "Produkt został usunięty";
+            $_SESSION['product_deleted'] = '<div class="ok">Produkt został usunięty</div>';
         }
     }
     if (isset($_POST['edit_product_text']) && strlen($_POST['edit_product_text']) > 0)
@@ -50,7 +50,7 @@
         $edit_query = $db->query('UPDATE products
         SET name="'.$new_product_name.'" 
         WHERE products.id="'.$old_product_name.'"');
-        $_SESSION['product_edited'] = "Nazwa produktu została zmieniona!";
+        $_SESSION['product_edited'] = '<div class="ok">Nazwa produktu została zmieniona!</div>';
     }
 ?>
 <!DOCTYPE HTML>
