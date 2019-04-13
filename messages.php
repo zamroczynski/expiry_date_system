@@ -16,7 +16,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 	<meta name="author" content="Damian Zamroczynski" />
 
-    <link rel="stylesheet" href="main.css" type="text/css" />
+    <link rel="stylesheet" href="css/old.css" type="text/css" />
     <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet">
 
     <!--[if lt IE 9]>

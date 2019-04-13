@@ -249,6 +249,15 @@ input[type=submit]:hover
     padding-bottom: 20px;
     font-size: 12px;
     z-index: 1;
+    display: inline-block;
+}
+.change_password
+{
+    display: inline-block;
+}
+.change_password > input[type=password]
+{
+    float: none;
 }
 .hello_div > h2
 {

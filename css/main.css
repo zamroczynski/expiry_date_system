@@ -1,0 +1,24 @@
+body
+{
+    background-color: #110000;
+    color: #FFFFFF;
+    font-size: 16px;
+    font-family: 'Lato', sans-serif;
+}
+a
+{
+    text-decoration: none;
+    color: #FFFFFF;
+}
+.content
+{
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    text-align: center;
+}
+.logo
+{
+    font-size: 18px;
+}
+
