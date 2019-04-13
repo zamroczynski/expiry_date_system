@@ -8,28 +8,30 @@
     if ((isset($_POST['login'])) || (isset($_POST['password'])))
     {
         $login = filter_input(INPUT_POST, 'login');
-        $password = filter_input(INPUT_POST, 'password');
+        $password = $_POST['password'];
         require_once 'database_connection.php';
         $user_query = $db->prepare('SELECT users.id, users.login, users.password, users.email, users.name, users.power, users.last_login 
         FROM users 
-        WHERE users.login=:login AND users.password=:password');
+        WHERE users.login=:login');
         $user_query->bindValue(':login', $login, PDO::PARAM_STR);
-        $user_query->bindValue(':password', $password, PDO::PARAM_STR);
         $user_query->execute();
         $user = $user_query->fetch();
-        if ($user)
+        if(password_verify($password, $user['password']))
         {
-            $_SESSION['logged'] = true;
-            $_SESSION['user_id'] = $user['id'];
-            $_SESSION['user_name'] = $user['name'];
-            $_SESSION['user_power'] = $user['power'];
-            $_SESSION['user_email'] = $user['email'];
-            $_SESSION['user_last_login'] = $user['last_login'];
-            $today = new DateTime();
-            $today_string = $today->format('Y-m-d H:i:s');
-            $db->query('UPDATE users SET last_login="'.$today_string.'"');
-            header('Location: user_profile.php');
-            exit();
+            if ($user)
+            {
+                $_SESSION['logged'] = true;
+                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['user_name'] = $user['name'];
+                $_SESSION['user_power'] = $user['power'];
+                $_SESSION['user_email'] = $user['email'];
+                $_SESSION['user_last_login'] = $user['last_login'];
+                $today = new DateTime();
+                $today_string = $today->format('Y-m-d H:i:s');
+                $db->query('UPDATE users SET last_login="'.$today_string.'"');
+                header('Location: user_profile.php');
+                exit();
+            }
         }
         else
         {

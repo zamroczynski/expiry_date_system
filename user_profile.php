@@ -5,6 +5,34 @@
         header('Location: log_in.php');
         exit();
     }
+    if(isset($_POST['old_password']))
+    {
+        $old_password = filter_input(INPUT_POST, 'old_password');
+        require_once 'database_connection.php';
+        $change_pass_query = $db->prepare('SELECT password FROM users WHERE password=:oldPassword AND id='.$_SESSION['user_id']);
+        $change_pass_query->bindValue(':oldPassword', $old_password, PDO::PARAM_STR);
+        $change_pass_query->execute();
+        if($change_pass_query->rowCount()>0)
+        {
+            if($_POST['new1_password']==$_POST['new2_password'])
+            {
+                $new_password = filter_input(INPUT_POST, 'new2_password');
+                $password_hash = password_hash($new_password, PASSWORD_DEFAULT);
+                $change_pass_query = $db->prepare('UPDATE users SET password=:newPassword WHERE id='.$_SESSION['user_id']);
+                $change_pass_query->bindValue(':newPassword', $password_hash, PDO::PARAM_STR);
+                $change_pass_query->execute();
+                $_SESSION['change_pass_success'] = '<div class="ok">Hasło zmienione</div>';
+            }
+            else
+            {
+                $_SESSION['new_error'] = '<div class="error_div">Hasła nie są takie same!</div>';
+            }
+        }
+        else
+        {
+            $_SESSION['old_error'] = '<div class="error_div">Błędne stare hasło!</div>';
+        }
+    }
 ?>
 <!DOCTYPE HTML>
 <html lang="pl">
@@ -79,15 +107,42 @@
             ?>
             </p>
             Ostatnie logowanie <?= $_SESSION['user_last_login'] ?>
-        </div>
+            </div>
         <div class="change_password">
-            <form method="POST">
-                Stare hasło: <input type="password" name="old_password" />
-                Nowe hasło: <input type="password" name="new1_password" />
-                Powtórz hasło: <input type="password" name="new2_password" />
-                <input type="submit" value="Zmień hasło" />
-            </form>
+            <h2>Zmiana hasła</h2>
+            <ol>
+                <form method="POST">
+                    <li><input type="password" name="old_password" placeholder="Stare hasło" required/></li>
+                    <li><input type="password" name="new1_password" placeholder="Nowe hasło" required/></li>
+                    <li><input type="password" name="new2_password" placeholder="Powtórz hasło" required/></li>
+                    <li><input type="submit" value="Zmień hasło" /></li>
+                </form>
+            </ol>
+            <?php
+            if(isset($_SESSION['old_error']))
+            {
+                echo $_SESSION['old_error'];
+                unset($_SESSION['old_error']);
+            }
+            if(isset($_SESSION['new_error']))
+            {
+                echo $_SESSION['new_error'];
+                unset($_SESSION['new_error']);
+            }
+            if(isset($_SESSION['change_pass_success']))
+            {
+                echo $_SESSION['change_pass_success'];
+                unset($_SESSION['change_pass_success']);
+            }
+            ?>
         </div>
+        <?php
+        if($_SESSION['user_power']>5)
+        {
+            echo '<div style="border-top: rgb(110, 1, 1) solid 2px;"></div>';
+            echo '<h2><a href="registration.php">Utwórz nowe konto</a></h2>';
+        }
+        ?>
         <div class="footer">Termin <span style="color:green;">ONLINE</span> - Stacja 4449 Bydgoszcz by Damian Zamroczynski &copy; 2019 Kontakt: damianzamroczynski@gmail.com</div>
     </div>
 </body>
