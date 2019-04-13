@@ -107,6 +107,12 @@ ul.nav li:hover
     {
         background-color: #720e0e;
     }
+    ol > li
+    {
+        float: none;
+        position: absolute;
+        size: auto;
+    }
 }
 .main_page_form
 {
@@ -395,4 +401,14 @@ table
 td, th
 {
     border: 1px solid rgb(110, 1, 1);
+}
+#excel
+{
+    background-color: rgb(110, 1, 1);
+    color: white;
+    padding: 7px 10px;
+    margin: 4px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
 }
