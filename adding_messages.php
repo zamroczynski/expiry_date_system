@@ -57,7 +57,7 @@
             $message_query->execute();
             $_SESSION['message_sent'] = 'Wiadomość wysłana!';
         }
-        else if ($_SESSION['user_power']<6 && $_SESSION['user_power']>2)
+        else if ($_SESSION['user_power']<6 && $_SESSION['user_power']>2 && $rank<3)
         {
             $message_query=$db->prepare('INSERT INTO messages VALUES 
             (null, :message, "'.$first_date.'", "'.$last_date.'", "'.$user.'", 1, '.$rank.')');
