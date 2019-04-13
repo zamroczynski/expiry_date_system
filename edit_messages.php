@@ -63,19 +63,43 @@
     }
     if (isset($_POST['id_message']))
     {
-        echo 'raz dwa trzy';
+        $rank = filter_input(INPUT_POST,'rank');
         $id_message = filter_input(INPUT_POST, 'id_message');
         $message = filter_input(INPUT_POST, 'new_message');
         $new_message = nl2br($message);
         $first_date = filter_input(INPUT_POST, 'first_date');
         $last_date = filter_input(INPUT_POST, 'last_date');
-        $rank = filter_input(INPUT_POST,'rank');
-        $message_query=$db->prepare('UPDATE messages 
+        if($_SESSION['user_power']>=6)
+        {
+            $message_query=$db->prepare('UPDATE messages 
             SET contents=:message, date_start="'.$first_date.'", date_end="'.$last_date.'", rank="'.$rank.'" 
             WHERE id='.$id_message);
-        $message_query->bindValue(':message', $new_message, PDO::PARAM_STR);
-        $message_query->execute();
-        header('Location: edit_messages.php');
+            $message_query->bindValue(':message', $new_message, PDO::PARAM_STR);
+            $message_query->execute();
+            header('Location: edit_messages.php');
+        }
+        else if($_SESSION['user_power']<=2 && $rank<=1)
+        {
+            $message_query=$db->prepare('UPDATE messages 
+            SET contents=:message, date_start="'.$first_date.'", date_end="'.$last_date.'", rank="'.$rank.'" 
+            WHERE id='.$id_message);
+            $message_query->bindValue(':message', $new_message, PDO::PARAM_STR);
+            $message_query->execute();
+            header('Location: edit_messages.php');
+        }
+        else if ($_SESSION['user_power']<6 && $_SESSION['user_power']>2)
+        {
+            $message_query=$db->prepare('UPDATE messages 
+            SET contents=:message, date_start="'.$first_date.'", date_end="'.$last_date.'", rank="'.$rank.'" 
+            WHERE id='.$id_message);
+            $message_query->bindValue(':message', $new_message, PDO::PARAM_STR);
+            $message_query->execute();
+            header('Location: edit_messages.php');
+        }
+        else
+        {
+            $_SESSION['message_error'] = 'Brak uprawnień!';
+        }
     }
 ?>
 <!DOCTYPE HTML>
@@ -129,6 +153,11 @@
             </ul>
         </div>
         <?php
+        if (isset($_SESSION['message_error']))
+        {
+            echo '<h2>'.$_SESSION['message_error'].'</h2>';
+            unset($_SESSION['message_error']);
+        }
         if(isset($_SESSION['edit_string']))
         {
             echo $string_form_message_adding;
