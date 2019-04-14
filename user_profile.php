@@ -143,7 +143,7 @@
             echo '<h2><a href="registration.php">Utwórz nowe konto</a></h2>';
         }
         ?>
-        <div class="footer">Termin <span style="color:green;">ONLINE</span> - Stacja 4449 Bydgoszcz by Damian Zamroczynski &copy; 2019 Kontakt: damianzamroczynski@gmail.com</div>
+        <div class="footer">Terminy <span style="color:green;">ONLINE</span> - Stacja 4449 Bydgoszcz by Damian Zamroczynski &copy; 2019 Kontakt: damianzamroczynski@gmail.com</div>
     </div>
 </body>
 </html>

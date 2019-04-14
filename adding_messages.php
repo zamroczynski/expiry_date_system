@@ -135,7 +135,7 @@
         echo '<h2>Dodawanie nowej wiadomości</h2>';
         echo $string_form_message_adding;
         ?>
-        <div class="footer">Termin <span style="color:green;">ONLINE</span> - Stacja 4449 Bydgoszcz by Damian Zamroczynski &copy; 2019 Kontakt: damianzamroczynski@gmail.com</div>
+        <div class="footer">Terminy <span style="color:green;">ONLINE</span> - Stacja 4449 Bydgoszcz by Damian Zamroczynski &copy; 2019 Kontakt: damianzamroczynski@gmail.com</div>
     </div>
 </body>
 </html>
