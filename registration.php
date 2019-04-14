@@ -5,7 +5,31 @@
         header('Location: log_in.php');
         exit();
     }
-    
+    if (isset($_POST['login']))
+    {
+        require_once 'database_connection.php';
+        $login = filter_input(INPUT_POST, 'login');
+        $check_login = $db->prepare('SELECT login FROM users WHERE login=:login');
+        $check_login->bindValue(':login', $login, PDO::PARAM_STR);
+        $check_login->execute();
+        if ($check_login->rowCount()>0)
+        {
+            $_SESSION['login_error'] = '<div class="error_div">Istnieje już taki login!</div>';
+        }
+        else
+        {
+            $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+            $name = filter_input(INPUT_POST, 'name');
+            $email = filter_input(INPUT_POST, 'email');
+            $new_user = $db->prepare('INSERT INTO users VALUES (null, :login, :password, :email, :name, 1, null)');
+            $new_user->bindValue(':login', $login, PDO::PARAM_STR);
+            $new_user->bindValue(':password', $password, PDO::PARAM_STR);
+            $new_user->bindValue(':email', $email, PDO::PARAM_STR);
+            $new_user->bindValue(':name', $name, PDO::PARAM_STR);
+            $new_user->execute();
+            $_SESSION['new_user'] = '<div class="ok">Dodano nowego pracownika</div>';
+        }
+    }
 ?>
 <!DOCTYPE HTML>
 <html lang="pl">
@@ -35,12 +59,24 @@
             Jeżeli utraciłeś(łaś) dostęp do swojego konta, to skontaktuj się pilnie z PSP Dawidem albo Damianem. 
         </div>
         <div class="registration" >
+        <?php
+        if (isset($_SESSION['login_error']))
+        {
+            echo $_SESSION['login_error'];
+            unset($_SESSION['login_error']);
+        }
+        if (isset($_SESSION['new_user']))
+        {
+            echo $_SESSION['new_user'];
+            unset($_SESSION['new_user']);
+        }
+        ?>
         <ul>
             <form method="POST">
-                <li><input type="text" placeholder="LOGIN"></li>
-                <li><input type="text" placeholder="HASŁO"></li>
-                <li><input type="text" placeholder="IMIĘ I NAZWISKO"></li>
-                <li><input type="email" placeholder="EMAIL"></li>
+                <li><input type="text" placeholder="LOGIN" name="login" required></li>
+                <li><input type="text" placeholder="HASŁO" name="password" required></li>
+                <li><input type="text" placeholder="IMIĘ I NAZWISKO" name="name" required></li>
+                <li><input type="email" placeholder="EMAIL" name="email"></li>
                 <li><input type="submit" value="Załóż nowe konto!"></li>
             </form>
         <ul>

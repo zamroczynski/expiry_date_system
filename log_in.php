@@ -71,14 +71,14 @@
             <ul class="login">
                 <div style="margin-left:auto; margin-right:auto; margin-bottom:5px;">LOGOWANIE</div>
                     <form method="post">
-                        <li><input type="text" name="login" placeholder="Twój login..." /></li>
-                        <li><input type="password" name="password" placeholder="Twoje hasło..." /></li>
+                        <li><input type="text" name="login" placeholder="Twój login..." required></li>
+                        <li><input type="password" name="password" placeholder="Twoje hasło..." required></li>
                         <li><input type="submit" value="Zaloguj się!" /></li>
                     </form>
             </ul>
             <div class="error_div"><?= isset($_SESSION['login_error']) ? $_SESSION['login_error'] : '' ?></div>
         </div>
-        <div class="footer">Termin <span style="color:green;">ONLINE</span> - Stacja 4449 Bydgoszcz by Damian Zamroczynski &copy; 2019 Kontakt: damianzamroczynski@gmail.com</div>
+        <div class="footer">Terminy <span style="color:green;">ONLINE</span> - Stacja 4449 Bydgoszcz by Damian Zamroczynski &copy; 2019 Kontakt: damianzamroczynski@gmail.com</div>
     </div>
     <?php unset($_SESSION['login_error']) ?>
 </body>
