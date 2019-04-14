@@ -5,6 +5,12 @@
         header('Location: log_in.php');
         exit();
     }
+    if($_SESSION['user_power']<5)
+    {
+        $_SESSION['acces_denied'] = '<div class="error_div">Brak dostępu!</div>';
+        header('Location: user_profile.php');
+        exit();
+    }
     if (isset($_POST['login']))
     {
         require_once 'database_connection.php';
@@ -51,7 +57,7 @@
 <body>
     <div class="content">
         <div class="logo">
-            <a href="index.php"><h1>Rejestracja <span style="color:green;"> ONLINE </span>- Stacja 4449</h1></a>
+            <a href="user_profile.php"><h1>Rejestracja <span style="color:green;"> ONLINE </span>- Stacja 4449</h1></a>
         </div>
         <div style="border-top: rgb(110, 1, 1) solid 2px; margin-bottom: 20px;"></div>
         <div class="notice">

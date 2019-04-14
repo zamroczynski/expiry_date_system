@@ -5,6 +5,12 @@
         header('Location: log_in.php');
         exit();
     }
+    if($_SESSION['user_power']<7)
+    {
+        $_SESSION['acces_denied'] = '<div class="error_div">Brak dostępu!</div>';
+        header('Location: user_profile.php');
+        exit();
+    }
     if(isset($_POST['old_password']))
     {
         $old_password = filter_input(INPUT_POST, 'old_password');
@@ -93,16 +99,16 @@
                 unset($_SESSION['acces_denied']);
             }
             ?>
-            <h2>Witaj <?= $_SESSION['user_name'] ?> </h2>
-            <p>Ranga: 
+            <h2>Witaj <br/> <?= $_SESSION['user_name'] ?> </h2>
+            <p>Uprawnienia: 
             <?php
-                if($_SESSION['user_power'] == 10) echo 'Admin';
+                if($_SESSION['user_power'] == 10) echo 'Administrator';
                 if($_SESSION['user_power'] == 8) echo 'Prowadzący Stacje';
                 if($_SESSION['user_power'] == 7) echo 'Zastępca PSP';
                 if($_SESSION['user_power'] == 6) echo 'Instruktor';
                 if($_SESSION['user_power'] == 4) echo 'Prowadzący zmianę';
                 if($_SESSION['user_power'] == 2) echo 'Pracownik';
-                if($_SESSION['user_power'] == 1) echo 'Nowy';
+                if($_SESSION['user_power'] == 1) echo 'Nowy Pracownik';
                 if($_SESSION['user_power'] == 0) echo 'Gość';
             ?>
             </p>
@@ -141,6 +147,11 @@
         {
             echo '<div style="border-top: rgb(110, 1, 1) solid 2px;"></div>';
             echo '<h2><a href="registration.php">Utwórz nowe konto</a></h2>';
+        }
+        if($_SESSION['user_power']>7)
+        {
+            echo '<div style="border-top: rgb(110, 1, 1) solid 2px;"></div>';
+            echo '<h2><a href="edit_profile.php">Edycja danych pracownika</a></h2>';
         }
         ?>
         <div class="footer">Terminy <span style="color:green;">ONLINE</span> - Stacja 4449 Bydgoszcz by Damian Zamroczynski &copy; 2019 Kontakt: damianzamroczynski@gmail.com</div>
