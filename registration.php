@@ -27,9 +27,8 @@
             $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
             $name = filter_input(INPUT_POST, 'name');
             $email = filter_input(INPUT_POST, 'email');
-            $new_user = $db->prepare('INSERT INTO users VALUES (null, :login, :password, :email, :name, 1, null)');
+            $new_user = $db->prepare('INSERT INTO users VALUES (null, :login, "'.$password.'", :email, :name, 1, null)');
             $new_user->bindValue(':login', $login, PDO::PARAM_STR);
-            $new_user->bindValue(':password', $password, PDO::PARAM_STR);
             $new_user->bindValue(':email', $email, PDO::PARAM_STR);
             $new_user->bindValue(':name', $name, PDO::PARAM_STR);
             $new_user->execute();

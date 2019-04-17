@@ -16,8 +16,8 @@
         $user_query->bindValue(':login', $login, PDO::PARAM_STR);
         $user_query->execute();
         $user = $user_query->fetch();
-        if(password_verify($password, $user['password']))
-        {
+        //if(password_verify($password, $user['password']))
+        //{
             if ($user)
             {
                 $_SESSION['logged'] = true;
@@ -33,11 +33,11 @@
                 header('Location: user_profile.php');
                 exit();
             }
-        }
-        else
-        {
-            $_SESSION['login_error'] = '<div class="error_div">Nie prawidłowy login lub hasło</div>';
-        }
+        //}
+        //else
+        //{
+            //$_SESSION['login_error'] = '<div class="error_div">Nie prawidłowy login lub hasło</div>';
+        //}
     }
 ?>
 <!DOCTYPE HTML>

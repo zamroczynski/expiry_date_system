@@ -5,12 +5,6 @@
         header('Location: log_in.php');
         exit();
     }
-    if($_SESSION['user_power']<7)
-    {
-        $_SESSION['acces_denied'] = '<div class="error_div">Brak dostępu!</div>';
-        header('Location: user_profile.php');
-        exit();
-    }
     if(isset($_POST['old_password']))
     {
         $pass = $_POST['old_password'];
