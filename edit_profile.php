@@ -34,11 +34,11 @@
         }
         else
         {
-            $new_password = password_hash($_POST['NEWpassword'], PASSWORD_DEFAULT);
+            $pass = filter_input(INPUT_POST, 'NEWpassword');
+            $new_password = password_hash($pass, PASSWORD_DEFAULT);
             $id = filter_input(INPUT_POST, 'id');
-            $update_user = $db->prepare('UPDATE users SET login=:newLogin, password=:newPassword WHERE id='.$id);
+            $update_user = $db->prepare('UPDATE users SET login=:newLogin, password="'.$new_password.'" WHERE id='.$id);
             $update_user->bindValue(':newLogin', $new_login, PDO::PARAM_STR);
-            $update_user->bindValue(':newPassword', $new_password, PDO::PARAM_STR);
             $update_user->execute();
             $_SESSION['updated'] = '<div class="ok">Login i hasło zmienione!</div>';
         }
