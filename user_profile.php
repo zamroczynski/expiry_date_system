@@ -13,19 +13,15 @@
     }
     if(isset($_POST['old_password']))
     {
-        $old_password = filter_input(INPUT_POST, 'old_password');
-        require_once 'database_connection.php';
-        $change_pass_query = $db->prepare('SELECT password FROM users WHERE password=:oldPassword AND id='.$_SESSION['user_id']);
-        $change_pass_query->bindValue(':oldPassword', $old_password, PDO::PARAM_STR);
-        $change_pass_query->execute();
-        if($change_pass_query->rowCount()>0)
+        $pass = $_POST['old_password'];
+        if(password_verify($pass, $_SESSION['user_pass']))
         {
             if($_POST['new1_password']==$_POST['new2_password'])
             {
-                $new_password = filter_input(INPUT_POST, 'new2_password');
+                require_once 'database_connection.php';
+                $new_password = $_POST['new2_password'];
                 $password_hash = password_hash($new_password, PASSWORD_DEFAULT);
-                $change_pass_query = $db->prepare('UPDATE users SET password=:newPassword WHERE id='.$_SESSION['user_id']);
-                $change_pass_query->bindValue(':newPassword', $password_hash, PDO::PARAM_STR);
+                $change_pass_query = $db->prepare('UPDATE users SET password="'.$password_hash.'" WHERE id='.$_SESSION['user_id']);
                 $change_pass_query->execute();
                 $_SESSION['change_pass_success'] = '<div class="ok">Hasło zmienione</div>';
             }

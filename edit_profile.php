@@ -34,7 +34,7 @@
         }
         else
         {
-            $pass = filter_input(INPUT_POST, 'NEWpassword');
+            $pass = $_POST['NEWpassword'];
             $new_password = password_hash($pass, PASSWORD_DEFAULT);
             $id = filter_input(INPUT_POST, 'id');
             $update_user = $db->prepare('UPDATE users SET login=:newLogin, password="'.$new_password.'" WHERE id='.$id);

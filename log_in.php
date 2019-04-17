@@ -23,6 +23,7 @@
                 $_SESSION['logged'] = true;
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['user_name'] = $user['name'];
+                $_SESSION['user_pass'] = $user['password'];
                 $_SESSION['user_power'] = $user['power'];
                 $_SESSION['user_email'] = $user['email'];
                 $_SESSION['user_last_login'] = $user['last_login'];
