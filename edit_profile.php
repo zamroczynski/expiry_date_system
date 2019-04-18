@@ -6,21 +6,13 @@
         exit();
     }
     require_once 'database_connection.php';
-    if (isset($_POST['OLDname']))
+    $select_all_users = $db->query('SELECT * FROM users');
+    $all_users = $select_all_users->fetchAll();
+    if(isset($_POST['user']))
     {
-        $name = filter_input(INPUT_POST, 'OLDname');
-        $search_user = $db->prepare('SELECT * FROM users WHERE name LIKE :name');
-        $search_user->bindValue(':name', $name, PDO::PARAM_STR);
-        $search_user->execute();
-        if($search_user->rowCount()>0)
-        {
-            $user = $search_user->fetch();
-            $choose = $_POST['choose'];
-        }
-        else
-        {
-            $_SESSION['search_error'] = '<div class="error_div">Nie znaleziono użytkownika!</div>';
-        }
+        $user_query = $db->query('SELECT * FROM users WHERE id='.$_POST['user']);
+        $user = $user_query->fetch();
+        $choose = $_POST['choose'];
     }
     if (isset($_POST['NEWlogin']))
     {
@@ -105,17 +97,28 @@
             }
             ?>
             <form method="POST">
-            <label>Co chcesz zmienić?
+            <label>Co chcesz zmienić?<br/>
                 <select name="choose">
                     <option value="login">Login i hasło</option>
                     <option value="name">Imię i nazwikso</option>
                     <option value="power">Prawa</option>
                 </select></label><br />
-                <input type="text" name="OLDname" placeholder="Wpisz poprawne imię i nazwisko" required>
-                
-                <input type="submit" value="Szukaj">
+                Komu?<br />
+                <select name="user">
+                    <?php
+                    foreach($all_users as $row)
+                    {
+                        echo '<option value=';
+                        echo $row['id'];
+                        echo '>';
+                        echo $row['name'];
+                        echo '</option>';
+                    }
+                    ?>
+                </select>
+                <br />
+                <input type="submit" value="Pokaż">
             </form>
-        </div>
         
         <?php
             if(isset($user))
@@ -170,7 +173,7 @@
                 }
             }
             ?>
-
+        </div>
         <div class="footer">Terminy <span style="color:green;">ONLINE</span> - Stacja 4449 Bydgoszcz by Damian Zamroczynski &copy; 2019 Kontakt: damianzamroczynski@gmail.com</div>
     </div>
 </body>
