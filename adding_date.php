@@ -7,7 +7,7 @@
     }
     if($_SESSION['user_power']<2)
     {
-        $_SESSION['acces_denied'] = '<div class="error_div">Brak dostępu!</div>';
+        $_SESSION['acces_denied'] = '<div class="error">Brak dostępu!</div>';
         header('Location: user_profile.php');
         exit();
     }
@@ -15,12 +15,10 @@
     $today = new DateTime();
     $today_string = $today->format('Y-m-d');
     $string_form_product_search = '
-        <div class="adding_date_form">
+        <div>
             <form method="POST">
-                <ul class="adding">
-                <li><input type="text" name="product_name" placeholder="Wpisz nazwę produktu" /></li>
-                <li><input type="submit" value="Wyszukaj" /></li>
-                </ul>
+                <div><input type="text" name="product_name" placeholder="Wpisz nazwę produktu"></div>
+                <div><input type="submit" value="Wyszukaj"></div>
             </form>
         </div>';
     if (isset($_POST['product_name']))
@@ -40,7 +38,7 @@
         $expiry_test_query->execute();
         if ($expiry_test_query->rowCount()>0)
         {
-            $_SESSION['error'] = '<div class="error_div">Istnieje już taki termin!</div>';
+            $_SESSION['error'] = '<div class="error">Istnieje już taki termin!</div>';
         }
         else
         {
@@ -52,103 +50,145 @@
 ?>
 <!DOCTYPE HTML>
 <html lang="pl">
-<head>
-	<meta charset="utf-8" />
-	<title>Stacja Paliw 4449 - Dodawanie terminu</title>
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-	<meta name="author" content="Damian Zamroczynski" />
-
-    <link rel="stylesheet" href="css/old.css" type="text/css" />
-    <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!--[if lt IE 9]>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"</scripts>
-    <![endif]-->
-
-</head>
-<body>
-    <div class="content">
-        <div class="logo">
-            <a href="index.php"><h1>Terminy <span style="color:green;"> ONLINE </span>- Stacja 4449</h1></a>
-        </div>
-        <div class="main_bar">
-            <ul class="nav">
-            <li>
-                    <a href="#" class="active">Terminy</a>
-                    <ul>
-                        <li><a href="adding_date.php">Dodaj terminy</a></li>
-                        <li><a href="edit_date.php">Edytuj terminy</a></li>
-                        <li><a href="generate_report.php">Generuj Raport</a></li>
-                    </ul>
-                </li>
-                
-                <li>
-                    <a href="#">Produkty</a>
-                    <ul>
-                        <li><a href="adding_products.php">Dodaj produkty</a></li>
-                        <li><a href="edit_products.php">Edytuj produkty</a></li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="#">Wiadomości</a>
-                    <ul>
-                        <li><a href="adding_messages.php">Dodaj wiadomości</a></li>
-                        <li><a href="edit_messages.php">Edytuj wiadomości</a></li>
-                    </ul>
-                </li>
-                <li><a href="user_profile.php">Profil</a></li>
-                <li class="last"><a href="log_out.php">Wyloguj się</a></li>
-            </ul>
-        </div>
+    <head>
+        <title>Stacja Paliw 4449</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <meta name="author" content="Damian Zamroczynski" />
+        <link rel="stylesheet" href="css/fontello.css">
+        <link rel="stylesheet" href="css/bootstrap.min.css" />
+        <link rel="stylesheet" href="css/main.css" />
         
-        <?php
-        if (isset($_POST['product_name']))
-        {
-            $product_query->execute();
-            $products = $product_query->fetchAll();
-            if ($products)
-            {
-                
-                echo '<form method="post">';
-                echo '<div class="result_grid">';
-                foreach($products as $row)
-                {
-                    echo '<label class="my_radio_inputs">';
-                    echo '<input type="radio" name="radio_name" value="'.$row['id'].'" />';
-                    echo $row['name'];
-                    echo '<span class="checkmark"></span></label>';
-                }
-                echo '';
-                echo '<div style="margin: 0 10px;"></div>';
-                echo '</div><input type="date" name="expiry_date" value="'.$today_string.'" /><input type="submit" value="Zapisz termin" /></form>';
-                echo "";
-            }
-            else
-            {
-                echo '<h2>Brak Wyniku!</h2>';
-                echo $string_form_product_search;
-            }
-            echo '</ol>';
-        }
-        else
-        {
-        echo '<h2>Dodawanie Terminu</h2>';
-        echo $string_form_product_search;
-        }
-        if (isset($_SESSION['error']))
-        {
-            echo '<div class="error_div">'.$_SESSION['error'].'</div>';
-            unset($_SESSION['error']);
-        }
-        if (isset($_SESSION['output_message']))
-        {
-            echo '<div class="ok">'.$_SESSION['output_message'].'</div>';
-            unset($_SESSION['output_message']);
-        }
-        ?>
-        <div class="footer">Terminy <span style="color:green;">ONLINE</span> - Stacja 4449 Bydgoszcz by Damian Zamroczynski &copy; 2019 Kontakt: damianzamroczynski@gmail.com</div>
-    </div>
-    <?php unset($_POST['product_name']); unset($_POST['expiry_date']); ?>
-</body>
+        <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <!--[if lt IE 9]>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"</scripts>
+        <![endif]-->
+    </head>
+    <body>
+        <header>
+            <nav class="navbar navbar-dark navbar-expand-md">
+                <a class="navbar-brand" href="index.php">
+                    <i class="icon-fuel"></i> Stacja 4449
+                </a>
+                <button class="navbar-toggler" type="button" 
+                data-toggle="collapse" data-target="#mainmenu" 
+                aria-controls="mainmenu" aria-expanded="false" 
+                aria-label="Pzełącznik nawigacji">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="mainmenu">
+                    <ul class="navbar-nav">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle active" href="#" data-toggle="dropdown" role="button">
+                                Terminy
+                            </a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item active" href="adding_date.php">Dodaj Termin</a>
+                                <a class="dropdown-item" href="edit_date.php">Edytuj Termin</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="generate_report.php">Generuj raport</a>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button">Produkty</a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="adding_product.php">Dodaj Produkt</a>
+                                <a class="dropdown-item" href="edit_product.php">Edytuj Produkt</a>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button">Wiadomości</a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="adding_message.php">Dodaj Wiadomość</a>
+                                <a class="dropdown-item" href="edit_message.php">Edytuj Wiadomość</a>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button">Profil</a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="user_profile.php">Mój profil</a>
+                                <a class="dropdown-item" href="change_password.php">Zmień hasło</a>
+                                <a class="dropdown-item" href="#">###</a>
+                            </div>
+                        </li>
+                        <li class="nav-item"><a class="nav-link" href="log_out.php">Wyloguj</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <main>
+            <article>
+                <div class="container-fluid">
+                    <header>
+                        Dodawanie Terminu
+                    </header>
+                    <div class="row">
+                            <?php
+                                if (isset($_POST['product_name']))
+                                {
+                                    $product_query->execute();
+                                    $products = $product_query->fetchAll();
+                                    if ($products)
+                                    {
+                                        echo '<form method="post">';
+                                        echo '<div class="form-group row">';
+                                        foreach($products as $row)
+                                        {
+                                            echo '<label class="col-sm-12 col-md-6 col-lg-4 col-form-label">';
+                                            echo '<input type="radio" name="radio_name" value="'.$row['id'].'" />';
+                                            echo '<div>';
+                                            echo $row['name'];
+                                            echo '</div></label>';
+                                        }
+                                        echo '</div><input type="date" name="expiry_date" value="'.$today_string.'" /> 
+                                            <input type="submit" value="Zapisz termin" /></form>';
+                                    }
+                                    else
+                                    {
+                                        echo '<div class="col-sm-12">';
+                                        echo '<h2>Brak Wyniku!</h2>';
+                                        echo $string_form_product_search;
+                                        echo '</div>';
+                                    }
+                                    echo '</ol>';
+                                }
+                                else
+                                {
+                                    echo '<div class="col-sm-12">';
+                                    echo $string_form_product_search;
+                                    echo '</div>';
+                                }
+                                if (isset($_SESSION['error']))
+                                {
+                                    echo '<div class="col-sm-12">';
+                                    echo $_SESSION['error'];
+                                    echo '</div>';
+                                    unset($_SESSION['error']);
+                                }
+                                if (isset($_SESSION['output_message']))
+                                {
+                                    echo '<div class="col-sm-12">';
+                                    echo $_SESSION['output_message'];
+                                    echo '</div>';
+                                    unset($_SESSION['output_message']);
+                                }
+                            ?>
+                    </div>
+                </div>
+            </article>
+        </main>
+        <footer>
+            Stacja 4449 Bydgoszcz by Damian Zamroczynski &copy; 2019 Kontakt: damianzamroczynski@gmail.com
+        </footer>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" 
+                integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" 
+                crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" 
+                integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" 
+                crossorigin="anonymous"></script>
+        <script src="js/bootstrap.min.js"></script>
+    </body>
 </html>

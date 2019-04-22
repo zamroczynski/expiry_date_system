@@ -5,6 +5,67 @@
         header('Location: log_in.php');
         exit();
     }
+    if($_SESSION['user_power']<2)
+    {
+        $_SESSION['acces_denied'] = '<div class="error_div">Brak dostępu!</div>';
+        header('Location: user_profile.php');
+        exit();
+    }
+    require_once 'database_connection.php';
+    $today = new DateTime();
+    $today_string = $today->format('Y-m-d');
+    $string_form_message_adding = '
+        <div>
+            <form method="POST">
+                <div>Obowiązuje od <input type="date" name="first_date" value="'.$today_string.'" >
+                 do <input type="date" name="last_date" value="'.$today_string.'" ></div>
+                <div><textarea name="message" class="form-control"></textarea></div>
+                <div>Jak ważna to wiadomość?
+                <select name="rank">
+                <option value="1">Zwykła wiadomość</option>
+                <option value="2">Ważna wiadmość!</option>
+                <option value="3">BARDZO WAŻNA WIADOMOŚĆ!</option>
+                </select></div>
+                <input type="submit" value="Dodaj" />
+            </form>
+        </div>';
+    if (isset($_POST['message']))
+    {
+
+        $message = nl2br(filter_input(INPUT_POST, 'message'));
+        $first_date = filter_input(INPUT_POST, 'first_date');
+        $last_date = filter_input(INPUT_POST, 'last_date');
+        $user = $_SESSION['user_id'];
+        $rank = filter_input(INPUT_POST,'rank');
+        if($_SESSION['user_power']>=6)
+        {
+            $message_query=$db->prepare('INSERT INTO messages VALUES 
+            (null, :message, "'.$first_date.'", "'.$last_date.'", "'.$user.'", 1, '.$rank.')');
+            $message_query->bindValue(':message', $message, PDO::PARAM_STR);
+            $message_query->execute();
+            $_SESSION['message_sent'] = '<div class="ok">Wiadomość wysłana!</div>';
+        }
+        else if($_SESSION['user_power']<=2 && $rank<=1)
+        {
+            $message_query=$db->prepare('INSERT INTO messages VALUES 
+            (null, :message, "'.$first_date.'", "'.$last_date.'", "'.$user.'", 1, '.$rank.')');
+            $message_query->bindValue(':message', $message, PDO::PARAM_STR);
+            $message_query->execute();
+            $_SESSION['message_sent'] = '<div class="ok">Wiadomość wysłana!</div>';
+        }
+        else if ($_SESSION['user_power']<6 && $_SESSION['user_power']>2 && $rank<3)
+        {
+            $message_query=$db->prepare('INSERT INTO messages VALUES 
+            (null, :message, "'.$first_date.'", "'.$last_date.'", "'.$user.'", 1, '.$rank.')');
+            $message_query->bindValue(':message', $message, PDO::PARAM_STR);
+            $message_query->execute();
+            $_SESSION['message_sent'] = '<div class="ok">Wiadomość wysłana!</div>';
+        }
+        else
+        {
+            $_SESSION['message_error'] = '<div class="error">Brak uprawnień!</div>';
+        }
+    }
 ?>
 <!DOCTYPE HTML>
 <html lang="pl">
@@ -58,16 +119,16 @@
                             </div>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button">Wiadomości</a>
+                            <a class="nav-link dropdown-toggle active" href="#" data-toggle="dropdown" role="button">Wiadomości</a>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" href="adding_message.php">Dodaj Wiadomość</a>
+                                <a class="dropdown-item active" href="adding_message.php">Dodaj Wiadomość</a>
                                 <a class="dropdown-item" href="edit_message.php">Edytuj Wiadomość</a>
                             </div>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle active" href="#" data-toggle="dropdown" role="button">Profil</a>
+                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button">Profil</a>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item active" href="user_profile.php">Mój profil</a>
+                                <a class="dropdown-item" href="user_profile.php">Mój profil</a>
                                 <a class="dropdown-item" href="change_password.php">Zmień hasło</a>
                                 <a class="dropdown-item" href="#">###</a>
                             </div>
@@ -80,49 +141,29 @@
         <main>
             <article>
                 <div class="container-fluid">
-                        <?php
-                            if (isset($_SESSION['acces_denied']))
-                            {
-                                echo $_SESSION['acces_denied'];
-                                unset($_SESSION['acces_denied']);
-                            }
-                        ?>
-                    <header class="hello">
-                        Witaj <?= $_SESSION['user_name'] ?>
+                    <header>
+                        Dodawanie nowej wiadomości
                     </header>
                     <div class="row">
-                        <div class="col-sm-12 user-profile-hello">
-                        
-                            <div>
-                                Twoje uprawnienia to: 
-                                <?php
-                                    if($_SESSION['user_power'] == 10) echo 'Administrator';
-                                    if($_SESSION['user_power'] == 9) echo 'Poszukiwacz błędów';
-                                    if($_SESSION['user_power'] == 8) echo 'Prowadzący Stacje';
-                                    if($_SESSION['user_power'] == 7) echo 'Zastępca PSP';
-                                    if($_SESSION['user_power'] == 6) echo 'Instruktor';
-                                    if($_SESSION['user_power'] == 4) echo 'Prowadzący zmianę';
-                                    if($_SESSION['user_power'] == 2) echo 'Pracownik';
-                                    if($_SESSION['user_power'] == 1) echo 'Nowy Pracownik';
-                                    if($_SESSION['user_power'] == 0) echo 'Gość';
-                                ?>
-                            </div>
-                            <div>
-                                Ostatnie logowanie: <?= $_SESSION['user_last_login'] ?>
-                            </div>
+                        <div class="col-sm-12">
+                            <?php
+                                echo $string_form_message_adding;
+                                if (isset($_SESSION['message_sent']))
+                                {
+                                    echo '<div class="col-sm-12">';
+                                    echo $_SESSION['message_sent'];
+                                    echo '<div>';
+                                    unset($_SESSION['message_sent']);
+                                }
+                                if (isset($_SESSION['message_error']))
+                                {
+                                    echo '<div class="col-sm-12">';
+                                    echo $_SESSION['message_error'];
+                                    echo '<div>';
+                                    unset($_SESSION['message_error']);
+                                }
+                            ?>
                         </div>
-                        <?php
-                            if($_SESSION['user_power']>5)
-                            {
-                                echo '<div class="col-sm-12 user-profile-border">';
-                                echo '<a href="registration.php">Utwórz nowe konto</a></div>';
-                            }
-                            if($_SESSION['user_power']>7)
-                            {
-                                echo '<div class="col-sm-12 user-profile-border">';
-                                echo '<a href="edit_profile.php">Edycja danych pracownika</a></div>';
-                            }
-                        ?>
                     </div>
                 </div>
             </article>

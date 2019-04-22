@@ -12,36 +12,43 @@
         exit();
     }
     require_once 'database_connection.php';
-    $today = new DateTime();
-    $today_string = $today->format('Y-m-d');
-    $string_form_product_search = '
+    $string_form_product_adding = '
         <div>
             <form method="POST">
-                <div><input type="text" name="product_name" placeholder="Wpisz nazwę produktu"></div>
-                <div><input type="submit" value="Wyszukaj"></div>
+                <input type="text" name="product_name" placeholder="Wpisz nazwę produktu" />
+                <input type="submit" value="Szukaj" />
             </form>
         </div>';
     if (isset($_POST['product_name']))
     {
         $product_name = filter_input(INPUT_POST, 'product_name');
-        $product_query = $db->prepare('SELECT expiry_date.id, expiry_date.date, products.name 
+        $product_query = $db->prepare('SELECT products.id, products.name 
+        FROM products WHERE products.name LIKE "%'.$product_name.'%" ORDER BY id DESC');
+    }
+    if (isset($_POST['product_to_delete']))
+    {
+        $product_to_delete = $_POST['radio_name'];
+        $check_query_product = $db->query('SELECT expiry_date.id, expiry_date.date, products.name 
         FROM expiry_date INNER JOIN products ON products.id=expiry_date.id_product 
-        WHERE products.name LIKE "%'.$product_name.'%" ORDER BY expiry_date.date');
+        WHERE expiry_date.id_product="'.$product_to_delete.'"'); 
+        if ($check_query_product->rowCount()>0)
+        {
+            $_SESSION['product_error'] = '<div class="error">Dla podanego produktu istnieją terminy, usuń najpierw terminy dla tego produktu!</div>';
+        }
+        else
+        {
+            $delete_query = $db->query('DELETE FROM products WHERE products.id="'.$product_to_delete.'"');
+            $_SESSION['product_deleted'] = '<div class="ok">Produkt został usunięty</div>';
+        }
     }
-    if (isset($_POST['date_to_delete']))
+    if (isset($_POST['edit_product_text']) && strlen($_POST['edit_product_text']) > 0)
     {
-        $date_to_delete = $_POST['radio_name'];
-        $delete_query = $db->query('DELETE FROM expiry_date WHERE expiry_date.id="'.$date_to_delete.'"');
-        $_SESSION['delete_message'] = '<div class="ok">Termin został usunięty</div>';
-    }
-    if (isset($_POST['edit_date']))
-    {
-        $new_expiry_date = filter_input(INPUT_POST, 'edit_date');
-        $old_expiry_date = $_POST['radio_name'];
-        $edit_query = $db->query('UPDATE expiry_date 
-        SET date="'.$new_expiry_date.'" 
-        WHERE expiry_date.id="'.$old_expiry_date.'"');
-        $_SESSION['output_message'] = '<div class="ok">Termin został zmieniony!</div>';
+        $new_product_name = filter_input(INPUT_POST, 'edit_product_text');
+        $old_product_name = $_POST['radio_name'];
+        $edit_query = $db->query('UPDATE products
+        SET name="'.$new_product_name.'" 
+        WHERE products.id="'.$old_product_name.'"');
+        $_SESSION['product_edited'] = '<div class="ok">Nazwa produktu została zmieniona!</div>';
     }
 ?>
 <!DOCTYPE HTML>
@@ -78,21 +85,21 @@
                 <div class="collapse navbar-collapse" id="mainmenu">
                     <ul class="navbar-nav">
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle active" href="#" data-toggle="dropdown" role="button">
+                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button">
                                 Terminy
                             </a>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" href="adding_date.php">Dodaj Termin</a>
-                                <a class="dropdown-item active" href="edit_date.php">Edytuj Termin</a>
+                                <a class="dropdown-item" href="edit_date.php">Edytuj Termin</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="generate_report.php">Generuj raport</a>
                             </div>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button">Produkty</a>
+                            <a class="nav-link dropdown-toggle active" href="#" data-toggle="dropdown" role="button">Produkty</a>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" href="adding_product.php">Dodaj Produkt</a>
-                                <a class="dropdown-item" href="edit_product.php">Edytuj Produkt</a>
+                                <a class="dropdown-item active" href="edit_product.php">Edytuj Produkt</a>
                             </div>
                         </li>
                         <li class="nav-item dropdown">
@@ -119,9 +126,10 @@
             <article>
                 <div class="container-fluid">
                     <header>
-                        Edycja Terminu
+                        Edycja produktu
                     </header>
                     <div class="row">
+                        <div class="col-sm-12">
                             <?php
                                 if (isset($_POST['product_name']))
                                 {
@@ -129,6 +137,7 @@
                                     $products = $product_query->fetchAll();
                                     if ($products)
                                     {
+                                        
                                         echo '<form method="post">';
                                         echo '<div class="form-group row">';
                                         foreach($products as $row)
@@ -137,51 +146,43 @@
                                             echo '<input type="radio" name="radio_name" value="'.$row['id'].'">';
                                             echo '<div>';
                                             echo $row['name'];
-                                            echo '<div>';
-                                            echo $row['date'];
-                                            echo '</div></div></label>';
+                                            echo '</div></label>';
                                         }
-                                        echo '</div><input type="date" name="edit_date" value="'.$today_string.'" /><input type="submit" value="Edytuj termin"> 
-                                        <input type="submit" name="date_to_delete" value="USUŃ TERMIN" onclick="return  confirm(\'Czy napewno usunąć? \')" /></form>';
+                                        echo '</div><input type="text" name="edit_product_text" placeholder="Wprowadź nową nazwę" /> <input type="submit" value="Edytuj produkt" />';
+                                        echo '<input type="submit" name="product_to_delete" value="USUŃ PRODUKT" onclick="return  confirm(\'Czy napewno usunąć? \')" /></form>';
                                     }
                                     else
                                     {
-                                        echo '<div class="col-sm-12">';
                                         echo '<h2>Brak Wyniku!</h2>';
-                                        echo $string_form_product_search;
-                                        echo '</div>';
                                     }
-                                    echo '</ol>';
                                 }
                                 else
                                 {
-                                    echo '<div class="col-sm-12">';
-                                    echo $string_form_product_search;
-                                    echo '</div>';
+                                    echo $string_form_product_adding;
                                 }
-                                if (isset($_SESSION['error']))
+                                if (isset($_SESSION['product_deleted']))
                                 {
                                     echo '<div class="col-sm-12">';
-                                    echo $_SESSION['error'];
+                                    echo $_SESSION['product_deleted'];
                                     echo '</div>';
-                                    unset($_SESSION['error']);
+                                    unset($_SESSION['product_deleted']);
                                 }
-                                if (isset($_SESSION['delete_message']))
+                                if (isset($_SESSION['product_edited']))
                                 {
                                     echo '<div class="col-sm-12">';
-                                    echo $_SESSION['delete_message'];
+                                    echo $_SESSION['product_edited']; 
                                     echo '</div>';
-                                    unset($_SESSION['delete_message']);
+                                    unset($_SESSION['product_edited']);
                                 }
-                                else if (isset($_SESSION['output_message']))
+                                if (isset($_SESSION['product_deleted']))
                                 {
                                     echo '<div class="col-sm-12">';
-                                    echo $_SESSION['output_message'];
+                                    echo $_SESSION['product_error'];
                                     echo '</div>';
-                                    unset($_SESSION['output_message']);
+                                    unset($_SESSION['product_error']);
                                 }
-                                
                             ?>
+                        </div>
                     </div>
                 </div>
             </article>

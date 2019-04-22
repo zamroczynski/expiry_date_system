@@ -5,6 +5,44 @@
         header('Location: log_in.php');
         exit();
     }
+    if($_SESSION['user_power']<2)
+    {
+        $_SESSION['acces_denied'] = '<div class="error">Brak dostępu!</div>';
+        header('Location: user_profile.php');
+        exit();
+    }
+    require_once 'database_connection.php';
+    $string_form_product_adding = '
+        <div>
+            <form method="POST">
+                <input type="text" name="product_name" placeholder="Wpisz nazwę produktu" />
+                <input type="submit" value="Dodaj" />
+            </form>
+        </div>';
+    if (isset($_POST['product_name']))
+    {
+        $product_name = filter_input(INPUT_POST, 'product_name');
+        if (!strlen($product_name) || strlen($product_name)>60)
+        {
+            $_SESSION['product_error'] = '<div class="error">Błędna nazwa!</div>';
+        }
+        else
+        {
+            $product_check_query = $db->prepare('SELECT products.name 
+            FROM products WHERE products.name="'.$product_name.'"');
+            $product_check_query->execute();
+            if ($product_check_query->rowCount()>0)
+            {
+                $_SESSION['product_error'] = '<div class="error">Istnieje już produkt o podanej nazwie!</div>';
+            }
+            else
+            {
+                $product_add_query = $db->prepare('INSERT INTO products (id, name, ean_code) VALUES (null, \''.$product_name.'\', null)');
+                $product_add_query->execute();
+                $_SESSION['product'] = '<div class="ok">Pomyślnie dodano produkt</div>';
+            }
+        }
+    }
 ?>
 <!DOCTYPE HTML>
 <html lang="pl">
@@ -51,9 +89,9 @@
                             </div>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button">Produkty</a>
+                            <a class="nav-link dropdown-toggle active" href="#" data-toggle="dropdown" role="button">Produkty</a>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" href="adding_product.php">Dodaj Produkt</a>
+                                <a class="dropdown-item active" href="adding_product.php">Dodaj Produkt</a>
                                 <a class="dropdown-item" href="edit_product.php">Edytuj Produkt</a>
                             </div>
                         </li>
@@ -65,9 +103,9 @@
                             </div>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle active" href="#" data-toggle="dropdown" role="button">Profil</a>
+                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button">Profil</a>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item active" href="user_profile.php">Mój profil</a>
+                                <a class="dropdown-item" href="user_profile.php">Mój profil</a>
                                 <a class="dropdown-item" href="change_password.php">Zmień hasło</a>
                                 <a class="dropdown-item" href="#">###</a>
                             </div>
@@ -80,49 +118,28 @@
         <main>
             <article>
                 <div class="container-fluid">
-                        <?php
-                            if (isset($_SESSION['acces_denied']))
-                            {
-                                echo $_SESSION['acces_denied'];
-                                unset($_SESSION['acces_denied']);
-                            }
-                        ?>
-                    <header class="hello">
-                        Witaj <?= $_SESSION['user_name'] ?>
+                    <header>
+                        Dodawanie produktu
                     </header>
                     <div class="row">
-                        <div class="col-sm-12 user-profile-hello">
-                        
-                            <div>
-                                Twoje uprawnienia to: 
-                                <?php
-                                    if($_SESSION['user_power'] == 10) echo 'Administrator';
-                                    if($_SESSION['user_power'] == 9) echo 'Poszukiwacz błędów';
-                                    if($_SESSION['user_power'] == 8) echo 'Prowadzący Stacje';
-                                    if($_SESSION['user_power'] == 7) echo 'Zastępca PSP';
-                                    if($_SESSION['user_power'] == 6) echo 'Instruktor';
-                                    if($_SESSION['user_power'] == 4) echo 'Prowadzący zmianę';
-                                    if($_SESSION['user_power'] == 2) echo 'Pracownik';
-                                    if($_SESSION['user_power'] == 1) echo 'Nowy Pracownik';
-                                    if($_SESSION['user_power'] == 0) echo 'Gość';
-                                ?>
-                            </div>
-                            <div>
-                                Ostatnie logowanie: <?= $_SESSION['user_last_login'] ?>
-                            </div>
+                        <div class="col-sm-12">
+                            <?php
+                                if (isset($_POST['product_name']))
+                                {
+                                    if (isset($_SESSION['product_error']))
+                                    {
+                                        echo $_SESSION['product_error'];
+                                        unset($_SESSION['product_error']);
+                                    }
+                                    if (isset($_SESSION['product']))
+                                    {
+                                        echo $_SESSION['product'];
+                                        unset($_SESSION['product']);
+                                    }
+                                }
+                                echo $string_form_product_adding;
+                            ?>
                         </div>
-                        <?php
-                            if($_SESSION['user_power']>5)
-                            {
-                                echo '<div class="col-sm-12 user-profile-border">';
-                                echo '<a href="registration.php">Utwórz nowe konto</a></div>';
-                            }
-                            if($_SESSION['user_power']>7)
-                            {
-                                echo '<div class="col-sm-12 user-profile-border">';
-                                echo '<a href="edit_profile.php">Edycja danych pracownika</a></div>';
-                            }
-                        ?>
                     </div>
                 </div>
             </article>

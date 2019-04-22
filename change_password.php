@@ -5,6 +5,30 @@
         header('Location: log_in.php');
         exit();
     }
+    if(isset($_POST['old_password']))
+    {
+        $pass = $_POST['old_password'];
+        if(password_verify($pass, $_SESSION['user_pass']))
+        {
+            if($_POST['new1_password']==$_POST['new2_password'])
+            {
+                require_once 'database_connection.php';
+                $new_password = $_POST['new2_password'];
+                $password_hash = password_hash($new_password, PASSWORD_DEFAULT);
+                $change_pass_query = $db->prepare('UPDATE users SET password="'.$password_hash.'" WHERE id='.$_SESSION['user_id']);
+                $change_pass_query->execute();
+                $_SESSION['change_pass_success'] = '<div class="ok">Hasło zmienione</div>';
+            }
+            else
+            {
+                $_SESSION['new_error'] = '<div class="error_div">Hasła nie są takie same!</div>';
+            }
+        }
+        else
+        {
+            $_SESSION['old_error'] = '<div class="error_div">Błędne stare hasło!</div>';
+        }
+    }
 ?>
 <!DOCTYPE HTML>
 <html lang="pl">
@@ -65,10 +89,10 @@
                             </div>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle active" href="#" data-toggle="dropdown" role="button">Profil</a>
+                            <a class="nav-link active dropdown-toggle" href="user_profile.php" data-toggle="dropdown" role="button">Profil</a>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item active" href="user_profile.php">Mój profil</a>
-                                <a class="dropdown-item" href="change_password.php">Zmień hasło</a>
+                                <a class="dropdown-item" href="user_profile.php">Mój profil</a>
+                                <a class="dropdown-item active" href="change_password.php">Zmień hasło</a>
                                 <a class="dropdown-item" href="#">###</a>
                             </div>
                         </li>
@@ -80,49 +104,33 @@
         <main>
             <article>
                 <div class="container-fluid">
-                        <?php
-                            if (isset($_SESSION['acces_denied']))
-                            {
-                                echo $_SESSION['acces_denied'];
-                                unset($_SESSION['acces_denied']);
-                            }
-                        ?>
-                    <header class="hello">
-                        Witaj <?= $_SESSION['user_name'] ?>
-                    </header>
                     <div class="row">
-                        <div class="col-sm-12 user-profile-hello">
-                        
-                            <div>
-                                Twoje uprawnienia to: 
-                                <?php
-                                    if($_SESSION['user_power'] == 10) echo 'Administrator';
-                                    if($_SESSION['user_power'] == 9) echo 'Poszukiwacz błędów';
-                                    if($_SESSION['user_power'] == 8) echo 'Prowadzący Stacje';
-                                    if($_SESSION['user_power'] == 7) echo 'Zastępca PSP';
-                                    if($_SESSION['user_power'] == 6) echo 'Instruktor';
-                                    if($_SESSION['user_power'] == 4) echo 'Prowadzący zmianę';
-                                    if($_SESSION['user_power'] == 2) echo 'Pracownik';
-                                    if($_SESSION['user_power'] == 1) echo 'Nowy Pracownik';
-                                    if($_SESSION['user_power'] == 0) echo 'Gość';
-                                ?>
-                            </div>
-                            <div>
-                                Ostatnie logowanie: <?= $_SESSION['user_last_login'] ?>
-                            </div>
+                        <div class="col-sm-12 ch-pass">
+                            <?php
+                                if(isset($_SESSION['old_error']))
+                                {
+                                    echo $_SESSION['old_error'];
+                                    unset($_SESSION['old_error']);
+                                }
+                                if(isset($_SESSION['new_error']))
+                                {
+                                    echo $_SESSION['new_error'];
+                                    unset($_SESSION['new_error']);
+                                }
+                                if(isset($_SESSION['change_pass_success']))
+                                {
+                                    echo $_SESSION['change_pass_success'];
+                                    unset($_SESSION['change_pass_success']);
+                                }
+                            ?>
+                            <header>Zmiana hasła</header>
+                            <form method="POST">
+                                <div><input type="password" name="old_password" placeholder="Stare hasło" required></div>
+                                <div><input type="password" name="new1_password" placeholder="Nowe hasło" required></div>
+                                <div><input type="password" name="new2_password" placeholder="Powtórz hasło" required></div>
+                                <input type="submit" value="Zmień hasło">
+                            </form>
                         </div>
-                        <?php
-                            if($_SESSION['user_power']>5)
-                            {
-                                echo '<div class="col-sm-12 user-profile-border">';
-                                echo '<a href="registration.php">Utwórz nowe konto</a></div>';
-                            }
-                            if($_SESSION['user_power']>7)
-                            {
-                                echo '<div class="col-sm-12 user-profile-border">';
-                                echo '<a href="edit_profile.php">Edycja danych pracownika</a></div>';
-                            }
-                        ?>
                     </div>
                 </div>
             </article>
