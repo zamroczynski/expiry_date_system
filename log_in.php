@@ -74,9 +74,9 @@
                 </button>
                 <div class="collapse navbar-collapse" id="mainmenu">
                     <ul class="navbar-nav">
-                        <li class="nav-item"><a class="nav-link active" href="index.php">Terminy</a></li>
+                        <li class="nav-item"><a class="nav-link" href="index.php">Terminy</a></li>
                         <li class="nav-item"><a class="nav-link" href="messages.php">Wiadomości</a></li>
-                        <li class="nav-item"><a class="nav-link" href="log_in.php">Zaloguj</a></li>
+                        <li class="nav-item"><a class="nav-link active" href="log_in.php">Zaloguj</a></li>
                     </ul>
                 </div>
             </nav>

@@ -3,10 +3,23 @@
     require_once 'database_connection.php';
     $today = new DateTime();
     $today_string = $today->format('Y-m-d');
-    $today_messages = 'SELECT messages.contents, messages.date_start, messages.date_end, users.name, messages.active, messages.rank 
+    $today_messages = 'SELECT messages.id, messages.contents, messages.date_start, messages.date_end, users.name, messages.active, messages.rank 
     FROM messages INNER JOIN users ON messages.id_user=users.id 
     WHERE messages.date_end >= "'.$today_string.'" 
     ORDER BY messages.rank DESC, messages.date_end ASC';
+    if(isset($_POST['message']))
+    {
+        if (!isset($_SESSION['logged']))
+        {
+            $_SESSION['error'] = '<div class="error">Najpierw się zaloguj!</div>';
+            header('Location: log_in.php');
+            exit();
+        }
+        else
+        {
+            
+        }
+    }
 ?>
 <!DOCTYPE HTML>
 <html lang="pl">
@@ -43,7 +56,18 @@
                     <ul class="navbar-nav">
                         <li class="nav-item"><a class="nav-link" href="index.php">Terminy</a></li>
                         <li class="nav-item"><a class="nav-link active" href="messages.php">Wiadomości</a></li>
-                        <li class="nav-item"><a class="nav-link" href="log_in.php">Zaloguj</a></li>
+                        <li class="nav-item"><a class="nav-link" href="log_in.php">
+                            <?php
+                            if(isset($_SESSION['logged']))
+                            {
+                                echo 'Panel Stacji';
+                            }
+                            else
+                            {
+                                echo 'Zaloguj';
+                            }
+                            ?>
+                        </a></li>
                     </ul>
                 </div>
             </nav>
@@ -74,6 +98,14 @@
                                         echo '</div>';
                                         echo '</div>';
                                         print_r($row['contents']);
+                                        echo '<div class="message_bar">';
+                                        echo '<div class="comment-link"><a href="#">Pokaż komentarze (0)</a></div>';
+                                        echo '<div><form method="POST">
+                                        <input type="hidden" name="message" value="';
+                                        print_r($row['id']);
+                                        echo '">';
+                                        echo '<input type="submit" value="Dodaj komentarz" disabled></form></div>';
+                                        echo '</div>';
                                         echo '</div>';
                                     }
                                 }

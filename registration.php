@@ -69,11 +69,14 @@
                 </button>
                 <div class="collapse navbar-collapse" id="mainmenu">
                     <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="index.php">Strona Główna</a></li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button">
                                 Terminy
                             </a>
                             <div class="dropdown-menu">
+                                <a class="dropdown-item" href="index.php">Dzisiejsze Terminy</a>
+                                <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="adding_date.php">Dodaj Termin</a>
                                 <a class="dropdown-item" href="edit_date.php">Edytuj Termin</a>
                                 <div class="dropdown-divider"></div>

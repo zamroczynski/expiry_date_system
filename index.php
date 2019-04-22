@@ -51,7 +51,18 @@
                     <ul class="navbar-nav">
                         <li class="nav-item"><a class="nav-link active" href="index.php">Terminy</a></li>
                         <li class="nav-item"><a class="nav-link" href="messages.php">Wiadomości</a></li>
-                        <li class="nav-item"><a class="nav-link" href="log_in.php">Zaloguj</a></li>
+                        <li class="nav-item"><a class="nav-link" href="log_in.php">
+                        <?php
+                            if(isset($_SESSION['logged']))
+                            {
+                                echo 'Panel Stacji';
+                            }
+                            else
+                            {
+                                echo 'Zaloguj';
+                            }
+                        ?>
+                        </a></li>
                     </ul>
                 </div>
             </nav>
