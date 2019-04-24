@@ -96,21 +96,24 @@
                         <div class="col-sm-12 user-profile-hello">
                         
                             <div>
-                                Twoje uprawnienia to: 
-                                <?php
-                                    if($_SESSION['user_power'] == 10) echo 'Administrator';
-                                    if($_SESSION['user_power'] == 9) echo 'Poszukiwacz błędów';
-                                    if($_SESSION['user_power'] == 8) echo 'Prowadzący Stacje';
-                                    if($_SESSION['user_power'] == 7) echo 'Zastępca PSP';
-                                    if($_SESSION['user_power'] == 6) echo 'Instruktor';
-                                    if($_SESSION['user_power'] == 4) echo 'Prowadzący zmianę';
-                                    if($_SESSION['user_power'] == 2) echo 'Pracownik';
-                                    if($_SESSION['user_power'] == 1) echo 'Nowy Pracownik';
-                                    if($_SESSION['user_power'] == 0) echo 'Gość';
-                                ?>
+                                Twoje uprawnienia to:
+                                <div> 
+                                    <?php
+                                        if($_SESSION['user_power'] == 10) echo 'Administrator';
+                                        if($_SESSION['user_power'] == 9) echo 'Poszukiwacz błędów';
+                                        if($_SESSION['user_power'] == 8) echo 'Prowadzący Stacje';
+                                        if($_SESSION['user_power'] == 7) echo 'Zastępca PSP';
+                                        if($_SESSION['user_power'] == 6) echo 'Instruktor';
+                                        if($_SESSION['user_power'] == 4) echo 'Prowadzący zmianę';
+                                        if($_SESSION['user_power'] == 2) echo 'Pracownik';
+                                        if($_SESSION['user_power'] == 1) echo 'Nowy Pracownik';
+                                        if($_SESSION['user_power'] == 0) echo 'Gość';
+                                    ?>
+                                </div>
                             </div>
                             <div>
-                                Ostatnie logowanie: <?= $_SESSION['user_last_login'] ?>
+                                Ostatnie logowanie:
+                                <div><?= $_SESSION['user_last_login'] ?></div> 
                             </div>
                         </div>
                         <?php

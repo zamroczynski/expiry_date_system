@@ -50,7 +50,26 @@ input[type=submit], button
     border-radius: 4px;
     cursor: pointer;
 }
-input[type=text], input[type=password], input[type=email], input[type=date]
+input[type=file]
+{
+    display: none;
+}
+.myfile
+{
+    background-color: rgb(110, 1, 1);
+    color: white;
+    padding: 7px 10px;
+    margin: 4px 2px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    min-height: 1px;
+}
+.myfile:hover
+{
+    background-color: rgb(110, 1, 1);
+}
+input[type=text], input[type=password], input[type=email], input[type=date], input[type=tel]
 {
     padding: 3px 5px;
     margin: 4px 0;
@@ -161,7 +180,7 @@ footer
 .user-profile-hello
 {
     min-height: 180px;
-    line-height: 400%;
+    line-height: 200%;
 }
 .user-profile-border
 {

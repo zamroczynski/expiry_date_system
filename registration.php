@@ -139,10 +139,11 @@
                             }
                         ?>
                         <form method="POST">
-                            <div><input type="text" placeholder="LOGIN" name="login" required></div>
-                            <div><input type="text" placeholder="HASŁO" name="password" required></div>
-                            <div><input type="text" placeholder="IMIĘ I NAZWISKO" name="name" required></div>
-                            <div><input type="email" placeholder="EMAIL" name="email"></div>
+                            <div><input type="text" placeholder="login" name="login" required></div>
+                            <div><input type="text" placeholder="hasło" name="password" required></div>
+                            <div><input type="text" placeholder="imię i nazwisko" name="name" required></div>
+                            <div><input type="email" placeholder="email" name="email" disabled></div>
+                            <div><input type="tel" placeholder="numer tel" name="telphone" disabled></div>
                             <div><input type="submit" value="Załóż nowe konto!"></div>
                         </form>
                         </div>
