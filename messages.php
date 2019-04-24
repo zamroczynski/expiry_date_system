@@ -3,7 +3,8 @@
     require_once 'database_connection.php';
     $today = new DateTime();
     $today_string = $today->format('Y-m-d');
-    $today_messages = 'SELECT messages.id, messages.contents, messages.date_start, messages.date_end, users.name, messages.active, messages.rank 
+    $today_messages = 'SELECT messages.id, messages.contents, messages.date_start, messages.date_end, 
+    users.name, messages.active, messages.rank, messages.file_name 
     FROM messages INNER JOIN users ON messages.id_user=users.id 
     WHERE messages.date_end >= "'.$today_string.'" 
     ORDER BY messages.rank DESC, messages.date_end ASC';
@@ -83,6 +84,7 @@
                                 if ($result->rowCount() > 0)
                                 {
                                     foreach($result as $row) {
+                                        $imageURL = 'img/uploads/'.$row['file_name'];
                                         echo '<div class="col-sm-12 message">';
                                         echo '<div class="message_bar">';
                                         echo '<div class="who">Napisał(a): ';
@@ -99,6 +101,7 @@
                                         echo '</div>';
                                         echo '</div>';
                                         print_r($row['contents']);
+                                        echo '<div><img src="'.$imageURL.'" class="img-message" /></div>';
                                         echo '<div class="message_bar">';
                                         echo '<div class="comment-link"><a href="#">Pokaż komentarze (0)</a></div>';
                                         echo '<div><form method="POST">
