@@ -4,10 +4,11 @@
     $today = new DateTime();
     $today_string = $today->format('Y-m-d');
     $today_messages = 'SELECT messages.id, messages.contents, messages.date_start, messages.date_end, 
-    users.name, messages.active, messages.rank, messages.file_name 
-    FROM messages INNER JOIN users ON messages.id_user=users.id 
+    users.name, messages.active, messages.rank 
+    FROM messages INNER JOIN users ON users.id=messages.id_user 
     WHERE messages.date_end >= "'.$today_string.'" 
     ORDER BY messages.rank DESC, messages.date_end ASC';
+    $images = 'SELECT images.file_name, messages.id FROM images INNER JOIN messages ON images.id_message=messages.id';
     if(isset($_POST['message']))
     {
         if (!isset($_SESSION['logged']))
@@ -33,11 +34,19 @@
         <meta name="author" content="Damian Zamroczynski" />
         <link rel="stylesheet" href="css/fontello.css">
         <link rel="stylesheet" href="css/bootstrap.min.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.8.1/baguetteBox.min.css">
         <link rel="stylesheet" href="css/main.css" />
         
         <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" 
+                integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" 
+                crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" 
+                integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" 
+                crossorigin="anonymous"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.8.1/baguetteBox.min.js"></script>
         <!--[if lt IE 9]>
         <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"</scripts>
         <![endif]-->
@@ -80,36 +89,56 @@
                     <header>Wiadomości:</header>
                     <div class="row">
                             <?php
-                                $result = $db->query($today_messages);
-                                if ($result->rowCount() > 0)
+                                $result_messages = $db->query($today_messages);
+                                if ($result_messages->rowCount() > 0)
                                 {
-                                    foreach($result as $row) {
-                                        $imageURL = 'img/uploads/'.$row['file_name'];
+                                    foreach($result_messages as $row)
+                                    {
                                         echo '<div class="col-sm-12 message">';
-                                        echo '<div class="message_bar">';
-                                        echo '<div class="who">Napisał(a): ';
-                                        print_r($row['name']);
-                                        echo '</div>';
-                                        echo '<div class="time">Obowiązuje od ';
-                                        print_r($row['date_start']);
-                                        echo ' do ';
-                                        print_r($row['date_end']);
-                                        echo '</div>';
-                                        echo '<div class="rank">';
-                                        if ($row['rank']>=3) echo '<div style="color:red;text-transform: uppercase;">Bardzo ważna wiadomość!</div>';
-                                        if ($row['rank']==2) echo '<div style="color:#ff6666;">Ważna wiadomość!</div>';
-                                        echo '</div>';
-                                        echo '</div>';
-                                        print_r($row['contents']);
-                                        echo '<div><img src="'.$imageURL.'" class="img-message" /></div>';
-                                        echo '<div class="message_bar">';
-                                        echo '<div class="comment-link"><a href="#">Pokaż komentarze (0)</a></div>';
-                                        echo '<div><form method="POST">
-                                        <input type="hidden" name="message" value="';
-                                        print_r($row['id']);
-                                        echo '">';
-                                        echo '<input type="submit" value="Dodaj komentarz" disabled></form></div>';
-                                        echo '</div>';
+                                            echo '<div class="message_bar">';
+                                                echo '<div class="who">Napisał(a): ';
+                                                    print_r($row['name']);
+                                                echo '</div>';
+                                                echo '<div class="time">Obowiązuje od ';
+                                                    print_r($row['date_start']);
+                                                    echo ' do ';
+                                                    print_r($row['date_end']);
+                                                echo '</div>';
+                                                echo '<div class="rank">';
+                                                    if ($row['rank']>=3) echo '<div style="color:red;text-transform: uppercase;">Bardzo ważna wiadomość!</div>';
+                                                    if ($row['rank']==2) echo '<div style="color:#ff6666;">Ważna wiadomość!</div>';
+                                                echo '</div>';
+                                            echo '</div>';
+
+                                            print_r($row['contents']);
+                                            echo '<div class="tz-gallery">';
+                                            echo '<div class="row mb-3">';
+                                            
+                                            $result_images = $db->query($images);
+                                            foreach($result_images as $img)
+                                            {
+                                                if($row['id']==$img['id'])
+                                                {
+                                                    echo '<div class="col-md-4">';
+                                                    echo '<div class="card">';
+                                                    echo '<a class="lightbox" href="img/uploads/'.$img['file_name'].'">';
+                                                    echo '<img src="img/uploads/'.$img['file_name'].'" class="card-img-top" />';
+                                                    echo '</a>';
+                                                    echo '</div>';
+                                                    echo '</div>';
+                                                }
+                                            }
+                                            echo '</div>';
+                                            echo '</div>';
+                                            echo '</div>';
+                                            echo '<div class="message_bar">';
+                                                echo '<div class="comment-link"><a href="#">Pokaż komentarze (0)</a></div>';
+                                                echo '<div><form method="POST">
+                                                <input type="hidden" name="message" value="';
+                                                print_r($row['id']);
+                                                echo '">';
+                                                echo '<input type="submit" value="Dodaj komentarz" disabled></form></div>';
+                                            echo '</div>';
                                         echo '</div>';
                                     }
                                 }
@@ -120,19 +149,17 @@
                                     echo '</div>';
                                 }
                             ?>
+                            
                     </div>
                 </div>
+                
             </article>
         </main>
         <footer>
             Stacja 4449 Bydgoszcz by Damian Zamroczynski &copy; 2019 Kontakt: damianzamroczynski@gmail.com
         </footer>
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" 
-                integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" 
-                crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" 
-                integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" 
-                crossorigin="anonymous"></script>
-        <script src="js/bootstrap.min.js"></script>
+        <script>
+            baguetteBox.run('.tz-gallery');
+        </script>
     </body>
 </html>

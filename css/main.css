@@ -52,7 +52,7 @@ input[type=submit], button
 }
 input[type=file]
 {
-    display: none;
+    
 }
 .myfile
 {
@@ -205,8 +205,7 @@ textarea
 {
     margin: 10px 0;
 }
-.img-message
+.img-fluid
 {
-    max-width: 50%;
-    max-height: 50%;
+    margin-top: 10px;
 }

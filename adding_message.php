@@ -30,108 +30,79 @@
                 <option value="1">Zwykła wiadomość</option>
                 <option value="2">Ważna wiadmość!</option>
                 <option value="3">BARDZO WAŻNA WIADOMOŚĆ!</option>
-                </select></div>
+                </select></div>  
                 <div><label class="myfile">Załaduj obraz:
-                <input type="file" name="image" />
+                <input type="file" name="images[]" multiple>
                 </label></div>
                 <input type="submit" value="Dodaj" />
             </form>
         </div>';
     if (isset($_POST['message']))
     {
-        if(!empty($_FILES["image"]["name"]))
+        $message = nl2br(filter_input(INPUT_POST, 'message'));
+        $first_date = filter_input(INPUT_POST, 'first_date');
+        $last_date = filter_input(INPUT_POST, 'last_date');
+        $user = $_SESSION['user_id'];
+        $rank = filter_input(INPUT_POST,'rank');
+        if($_SESSION['user_power']>=6)
         {
-            $fileName = basename($_FILES["image"]["name"]);
-            $allowTypes = array('jpg','png','jpeg','gif','pdf');
-            $targetDir = "img/uploads/";
-            $targetFilePath = $targetDir . $fileName;
-            $fileType = pathinfo($targetFilePath,PATHINFO_EXTENSION);
-            $fileName = basename($_FILES["image"]["name"]);
-            if(in_array($fileType, $allowTypes))
-            {
-                $message = nl2br(filter_input(INPUT_POST, 'message'));
-                $first_date = filter_input(INPUT_POST, 'first_date');
-                $last_date = filter_input(INPUT_POST, 'last_date');
-                $user = $_SESSION['user_id'];
-                $rank = filter_input(INPUT_POST,'rank');
-                if($_SESSION['user_power']>=6)
-                {
-                    if(move_uploaded_file($_FILES["image"]["tmp_name"], $targetFilePath))
-                    {
-                        $message_query=$db->prepare('INSERT INTO messages VALUES 
-                        (null, :message, "'.$first_date.'", "'.$last_date.'", "'.$user.'", 1, '.$rank.', "'.$fileName.'")');
-                        $message_query->bindValue(':message', $message, PDO::PARAM_STR);
-                        $message_query->execute();
-                        $_SESSION['message_sent'] = '<div class="ok">Wiadomość wysłana!</div>';
-                    }
-                    else
-                    {
-                        $_SESSION['error'] = '<div class="error">Błąd przesyłu obrazu</div>';
-                        header('Location: adding_message.php');
-                    }
-                }
-                else if($_SESSION['user_power']<=2 && $rank<=1)
-                {
-                    $message_query=$db->prepare('INSERT INTO messages VALUES 
-                    (null, :message, "'.$first_date.'", "'.$last_date.'", "'.$user.'", 1, '.$rank.', "'.$fileName.'")');
-                    $message_query->bindValue(':message', $message, PDO::PARAM_STR);
-                    $message_query->execute();
-                    $_SESSION['message_sent'] = '<div class="ok">Wiadomość wysłana!</div>';
-                }
-                else if ($_SESSION['user_power']<6 && $_SESSION['user_power']>2 && $rank<3)
-                {
-                    $message_query=$db->prepare('INSERT INTO messages VALUES 
-                    (null, :message, "'.$first_date.'", "'.$last_date.'", "'.$user.'", 1, '.$rank.', "'.$fileName.'")');
-                    $message_query->bindValue(':message', $message, PDO::PARAM_STR);
-                    $message_query->execute();
-                    $_SESSION['message_sent'] = '<div class="ok">Wiadomość wysłana!</div>';
-                }
-                else
-                {
-                    $_SESSION['message_error'] = '<div class="error">Brak uprawnień!</div>';
-                }
-            }
-            else
-            {
-                $_SESSION['error'] = '<div class="error">Dozwolone formaty obrazu to: jpg, png, jpeg, gif, pdf</div>';
-                header('Location: adding_message.php');
-            }
+            $message_query=$db->prepare('INSERT INTO messages VALUES 
+            (null, :message, "'.$first_date.'", "'.$last_date.'", "'.$user.'", 1, '.$rank.')');
+            $message_query->bindValue(':message', $message, PDO::PARAM_STR);
+            $message_query->execute();
+            $_SESSION['message_sent'] = '<div class="ok">Wiadomość wysłana!</div>';
+        }
+        else if($_SESSION['user_power']<=2 && $rank<=1)
+        {
+            $message_query=$db->prepare('INSERT INTO messages VALUES 
+            (null, :message, "'.$first_date.'", "'.$last_date.'", "'.$user.'", 1, '.$rank.')');
+            $message_query->bindValue(':message', $message, PDO::PARAM_STR);
+            $message_query->execute();
+            $_SESSION['message_sent'] = '<div class="ok">Wiadomość wysłana!</div>';
+        }
+        else if ($_SESSION['user_power']<6 && $_SESSION['user_power']>2 && $rank<3)
+        {
+            $message_query=$db->prepare('INSERT INTO messages VALUES 
+            (null, :message, "'.$first_date.'", "'.$last_date.'", "'.$user.'", 1, '.$rank.')');
+            $message_query->bindValue(':message', $message, PDO::PARAM_STR);
+            $message_query->execute();
+            $_SESSION['message_sent'] = '<div class="ok">Wiadomość wysłana!</div>';
         }
         else
         {
-            $message = nl2br(filter_input(INPUT_POST, 'message'));
-            $first_date = filter_input(INPUT_POST, 'first_date');
-            $last_date = filter_input(INPUT_POST, 'last_date');
-            $user = $_SESSION['user_id'];
-            $rank = filter_input(INPUT_POST,'rank');
-            if($_SESSION['user_power']>=6)
+            $_SESSION['message_error'] = '<div class="error">Brak uprawnień!</div>';
+        }
+        if(!empty(array_filter($_FILES['images']['name'])))
+        {
+            $target_dir = "img/uploads/";
+            $allow_Types = array('jpg','png','jpeg','gif');
+            foreach($_FILES['images']['name'] as $key=>$val)
             {
-                $message_query=$db->prepare('INSERT INTO messages VALUES 
-                        (null, :message, "'.$first_date.'", "'.$last_date.'", "'.$user.'", 1, '.$rank.', null)');
-                $message_query->bindValue(':message', $message, PDO::PARAM_STR);
-                $message_query->execute();
-                $_SESSION['message_sent'] = '<div class="ok">Wiadomość wysłana!</div>';
+                $file_name = basename($_FILES['images']['name'][$key]);
+                $target_file_patch = $target_dir . $today_string . $file_name;
+                $file_type = pathinfo($target_file_patch,PATHINFO_EXTENSION);
+                if(in_array($file_type, $allow_Types))
+                {
+                    if(move_uploaded_file($_FILES['images']['tmp_name'][$key], $target_file_patch))
+                    {
+                        $last_message = $db->query('SELECT MAX(Id) FROM messages');
+                        $id_message = $last_message->fetch(PDO::FETCH_NUM);
+                        $image_insert = 'INSERT INTO images VALUES (null, '.$id_message[0].', "'.$today_string.$file_name.'")';
+                        $image_query = $db->query($image_insert);
+                        
+                    }
+                    else
+                    {
+                        $_SESSION['error'] = '<div class="error">Błąd przesyłu! Spróbuj ponownie</div>';
+                    }
+                }
+                else
+                {
+                    $_SESSION['error'] = '<div class="error">Nie dozwolony format pliku</div>';
+                    
+                }
             }
-            else if($_SESSION['user_power']<=2 && $rank<=1)
-            {
-                $message_query=$db->prepare('INSERT INTO messages VALUES 
-                        (null, :message, "'.$first_date.'", "'.$last_date.'", "'.$user.'", 1, '.$rank.', null)');
-                $message_query->bindValue(':message', $message, PDO::PARAM_STR);
-                $message_query->execute();
-                $_SESSION['message_sent'] = '<div class="ok">Wiadomość wysłana!</div>';
-            }
-            else if ($_SESSION['user_power']<6 && $_SESSION['user_power']>2 && $rank<3)
-            {
-                $message_query=$db->prepare('INSERT INTO messages VALUES 
-                        (null, :message, "'.$first_date.'", "'.$last_date.'", "'.$user.'", 1, '.$rank.', null)');
-                $message_query->bindValue(':message', $message, PDO::PARAM_STR);
-                $message_query->execute();
-                $_SESSION['message_sent'] = '<div class="ok">Wiadomość wysłana!</div>';
-            }
-            else
-            {
-                $_SESSION['message_error'] = '<div class="error">Brak uprawnień!</div>';
-            }
+            $_SESSION['message_sent'] .= '<div class="ok">Obraz(y) dodane!</div>';
         }
     }
 ?>
