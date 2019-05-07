@@ -28,6 +28,7 @@
                                     WHERE users.id='.$_SESSION['user_id'].' 
                                     ORDER BY messages.date_end');
     }
+    $images = $db->query('SELECT images.file_name, messages.id FROM images INNER JOIN messages ON images.id_message=messages.id');
     if (isset($_POST['delete_message']))
     {
         $message = filter_input(INPUT_POST, 'message_id');
@@ -213,20 +214,38 @@
                                         {
                                             echo '<form method="POST">';
                                             echo '<div class="col-sm-12 message">';
-                                            echo '<div class="message_bar">';
-                                            echo '<input type="hidden" name="message_id" value="'.$row['id'].'">';
-                                            echo '<div class="who">Napisał(a): ';
-                                            print_r($row['name']);
-                                            echo '</div>';
-                                            echo '<div class="time">Obowiązuje od ';
-                                            print_r($row['date_start']);
-                                            echo " do ";
-                                            print_r($row['date_end']);
-                                            echo '</div>';
-                                            if ($row['rank']>=3) echo '<div style="color:red;text-transform: uppercase;">Bardzo ważna wiadomość!</div>';
-                                            if ($row['rank']==2) echo '<div style="color:#ff6666;">Ważna wiadomość!</div>';
-                                            echo '</div>';
-                                            print_r($row['contents']);
+                                                echo '<div class="message_bar">';
+                                                    echo '<input type="hidden" name="message_id" value="'.$row['id'].'">';
+                                                    echo '<div class="who">Napisał(a): ';
+                                                        print_r($row['name']);
+                                                    echo '</div>';
+                                                    echo '<div class="time">Obowiązuje od ';
+                                                        print_r($row['date_start']);
+                                                        echo " do ";
+                                                        print_r($row['date_end']);
+                                                    echo '</div>';
+                                                    if ($row['rank']>=3) echo '<div style="color:red;text-transform: uppercase;">Bardzo ważna wiadomość!</div>';
+                                                    if ($row['rank']==2) echo '<div style="color:#ff6666;">Ważna wiadomość!</div>';
+                                                echo '</div>';
+                                                print_r($row['contents']);
+                                                echo '<div class="tz-gallery">';
+                                                echo '<div class="row mb-3">';
+                                                $images = $db->query('SELECT images.file_name, messages.id FROM images INNER JOIN messages ON images.id_message=messages.id');
+                                                foreach($images as $img)
+                                                {
+                                                    if($row['id']==$img['id'])
+                                                    {
+                                                        echo '<div class="col-md-4">';
+                                                        echo '<div class="card">';
+                                                        echo '<a class="lightbox" href="img/uploads/'.$img['file_name'].'">';
+                                                        echo '<img src="img/uploads/'.$img['file_name'].'" class="card-img-top" />';
+                                                        echo '</a>';
+                                                        echo '</div>';
+                                                        echo '</div>';
+                                                    }
+                                                }
+                                                echo '</div>';
+                                                echo '</div>';
                                             echo '</div>';
                                             echo '<div><input type="submit" name="delete_message" value="USUŃ" />';
                                             echo '<input type="submit" name="edit_message" value="EDYTUJ" /></div>';
