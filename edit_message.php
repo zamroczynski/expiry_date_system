@@ -12,6 +12,7 @@
         exit();
     }
     require_once 'database_connection.php';
+    $images = 'SELECT images.file_name, messages.id FROM images INNER JOIN messages ON images.id_message=messages.id';
     if($_SESSION['user_power']>6)
     {
         $all_messages = $db->query('SELECT messages.contents, messages.date_start, messages.date_end, messages.rank, 
@@ -30,6 +31,7 @@
     if (isset($_POST['delete_message']))
     {
         $message = filter_input(INPUT_POST, 'message_id');
+        $db->query('DELETE FROM images WHERE id_message="'.$message.'"');
         $db->query('DELETE FROM messages WHERE messages.id="'.$message.'"');
         header('Location: edit_message.php');
     }
