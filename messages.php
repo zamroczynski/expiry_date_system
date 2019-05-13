@@ -128,7 +128,7 @@
                                                     echo '</div>';
                                                 }
                                             }
-                                            echo '</div>';
+                                            
                                             echo '</div>';
                                             echo '</div>';
                                             echo '<div class="message_bar">';

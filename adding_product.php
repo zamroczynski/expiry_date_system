@@ -29,7 +29,8 @@
         else
         {
             $product_check_query = $db->prepare('SELECT products.name 
-            FROM products WHERE products.name="'.$product_name.'"');
+            FROM products WHERE products.name=:product_name');
+            $product_check_query->bindValue(':product_name', $product_name, PDO::PARAM_STR);
             $product_check_query->execute();
             if ($product_check_query->rowCount()>0)
             {
@@ -37,7 +38,8 @@
             }
             else
             {
-                $product_add_query = $db->prepare('INSERT INTO products (id, name, ean_code) VALUES (null, \''.$product_name.'\', null)');
+                $product_add_query = $db->prepare('INSERT INTO products (id, name, ean_code) VALUES (null, :product_name, null)');
+                $product_add_query->bindValue(':product_name', $product_name, PDO::PARAM_STR);
                 $product_add_query->execute();
                 $_SESSION['product'] = '<div class="ok">Pomyślnie dodano produkt</div>';
             }

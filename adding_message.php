@@ -7,7 +7,7 @@
     }
     if($_SESSION['user_power']<2)
     {
-        $_SESSION['acces_denied'] = '<div class="error_div">Brak dostępu!</div>';
+        $_SESSION['acces_denied'] = '<div class="error">Brak dostępu!</div>';
         header('Location: user_profile.php');
         exit();
     }

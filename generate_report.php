@@ -20,7 +20,7 @@
         $date_end = filter_input(INPUT_POST, 'date_end');
         $report = $db->prepare('SELECT expiry_date.date, products.name 
                                 FROM expiry_date INNER JOIN products ON products.id=expiry_date.id_product 
-                                WHERE expiry_date.date >= :dateStart && expiry_date.date <= :dateEnd');
+                                WHERE expiry_date.date >= :dateStart && expiry_date.date <= :dateEnd ORDER BY date');
         $report->bindValue(':dateStart', $date_start, PDO::PARAM_STR);
         $report->bindValue(':dateEnd', $date_end, PDO::PARAM_STR);
         $report->execute();
