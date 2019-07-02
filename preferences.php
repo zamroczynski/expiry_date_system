@@ -5,51 +5,14 @@
         header('Location: log_in.php');
         exit();
     }
-    if($_SESSION['user_power']<2)
-    {
-        $_SESSION['acces_denied'] = '<div class="error">Brak dostępu!</div>';
-        header('Location: user_profile.php');
-        exit();
-    }
     require_once 'database_connection.php';
-    $string_form_product_adding = '
-        <div>
-            <form method="POST">
-                <input type="text" name="product_name" placeholder="Wpisz nazwę produktu" />
-                <input type="submit" value="Dodaj" />
-            </form>
-        </div>';
-    if (isset($_POST['product_name']))
-    {
-        $product_name = filter_input(INPUT_POST, 'product_name');
-        if (!strlen($product_name) || strlen($product_name)>60)
-        {
-            $_SESSION['product_error'] = '<div class="error">Błędna nazwa!</div>';
-        }
-        else
-        {
-            $product_check_query = $db->prepare('SELECT products.name 
-            FROM products WHERE products.name=:product_name');
-            $product_check_query->bindValue(':product_name', $product_name, PDO::PARAM_STR);
-            $product_check_query->execute();
-            if ($product_check_query->rowCount()>0)
-            {
-                $_SESSION['product_error'] = '<div class="error">Istnieje już produkt o podanej nazwie!</div>';
-            }
-            else
-            {
-                $product_add_query = $db->prepare('INSERT INTO products (id, name, ean_code) VALUES (null, :product_name, null)');
-                $product_add_query->bindValue(':product_name', $product_name, PDO::PARAM_STR);
-                $product_add_query->execute();
-                $_SESSION['product'] = '<div class="ok">Pomyślnie dodano produkt</div>';
-            }
-        }
-    }
+    $today = new DateTime();
+    $today_string = $today->format('Y-m-d');
 ?>
 <!DOCTYPE HTML>
 <html lang="pl">
     <head>
-        <link rel="icon" href="img/icon.png">
+    <link rel="icon" href="img/icon.png">
         <title>Stacja Paliw 4449</title>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -80,11 +43,9 @@
                 </button>
                 <div class="collapse navbar-collapse" id="mainmenu">
                     <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link" href="index.php">Strona Główna</a></li>
+                        <li class="nav-item"><a class="nav-link" href="index.php">Strona Główna</a></li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button">
-                                Terminy
-                            </a>
+                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button">Terminy</a>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" href="adding_date.php">Dodaj Termin</a>
                                 <a class="dropdown-item" href="edit_date.php">Edytuj Termin</a>
@@ -93,9 +54,9 @@
                             </div>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle active" href="#" data-toggle="dropdown" role="button">Produkty</a>
+                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button">Produkty</a>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item active" href="adding_product.php">Dodaj Produkt</a>
+                                <a class="dropdown-item" href="adding_product.php">Dodaj Produkt</a>
                                 <a class="dropdown-item" href="edit_product.php">Edytuj Produkt</a>
                             </div>
                         </li>
@@ -115,10 +76,10 @@
                             </div>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button">Grafik</a>
+                            <a class="nav-link dropdown-toggle active" href="#" data-toggle="dropdown" role="button">Grafik</a>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" href="work_schedule.php">Grafik</a>
-                                <a class="dropdown-item" href="preferences.php">Preferencje</a>
+                                <a class="dropdown-item active" href="preferences.php">Preferencje</a>
                             </div>
                         </li>
                         <li class="nav-item"><a class="nav-link" href="log_out.php">Wyloguj</a></li>
@@ -129,28 +90,25 @@
         <main>
             <article>
                 <div class="container-fluid">
-                    <header>
-                        Dodawanie produktu
+                        <?php
+                            if (isset($_SESSION['acces_denied']))
+                            {
+                                echo $_SESSION['acces_denied'];
+                                unset($_SESSION['acces_denied']);
+                            }
+                        ?>
+                    <header class="hello">
+                        Wprowadź tutaj swoje prośby:
                     </header>
                     <div class="row">
                         <div class="col-sm-12">
-                            <?php
-                                if (isset($_POST['product_name']))
-                                {
-                                    if (isset($_SESSION['product_error']))
-                                    {
-                                        echo $_SESSION['product_error'];
-                                        unset($_SESSION['product_error']);
-                                    }
-                                    if (isset($_SESSION['product']))
-                                    {
-                                        echo $_SESSION['product'];
-                                        unset($_SESSION['product']);
-                                    }
-                                }
-                                echo $string_form_product_adding;
-                            ?>
-                        </div>
+                            <div class="form-row">
+                                <form method="POST">
+                                    Data: <input type="date" name="date" value="<?= $today_string ?>" class="form-control" />
+                                    Powód: <textarea name="reason" class="form-control"></textarea>
+                                    <input type="submit" value="Wyślij" class="form-control" />
+                                </form>
+                            </div>
                     </div>
                 </div>
             </article>
