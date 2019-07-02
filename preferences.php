@@ -8,6 +8,24 @@
     require_once 'database_connection.php';
     $today = new DateTime();
     $today_string = $today->format('Y-m-d');
+
+    if(isset($_POST['date']))
+    {
+        $employee_date = filter_input(INPUT_POST, 'date');
+        $employee_reason = filter_input(INPUT_POST, 'reason');
+        $check_query = $db->prepare('SELECT * FROM preferences WHERE date="'.$employee_date.'"');
+        $check_query->execute();
+        if($check_query->rowCount()>0)
+        {
+            $_SESSION['error'] = '<div class="error">Masz już ustawioną prośbę na ten dzień</div>';
+        }
+        else
+        {
+            $insert_query = $db->prepare('INSERT INTO preferences VALUES (null, '.$_SESSION['user_id'].', "'.$employee_date.'", "'.$employee_reason.'")');
+            $insert_query->execute();
+            $_SESSION['output_message'] = '<div class="ok">Pomyślnie dodano nową prośbę!</div>';
+        }
+    }
 ?>
 <!DOCTYPE HTML>
 <html lang="pl">
@@ -96,6 +114,20 @@
                                 echo $_SESSION['acces_denied'];
                                 unset($_SESSION['acces_denied']);
                             }
+                            if (isset($_SESSION['error']))
+                            {
+                                echo '<div class="col-sm-12">';
+                                echo $_SESSION['error'];
+                                echo '</div>';
+                                unset($_SESSION['error']);
+                            }
+                            if (isset($_SESSION['output_message']))
+                            {
+                                echo '<div class="col-sm-12">';
+                                echo $_SESSION['output_message'];
+                                echo '</div>';
+                                unset($_SESSION['output_message']);
+                            }
                         ?>
                     <header class="hello">
                         Wprowadź tutaj swoje prośby:
@@ -104,13 +136,18 @@
                         <div class="col-sm-12">
                             <div class="form-row">
                                 <form method="POST">
-                                    Data: <input type="date" name="date" value="<?= $today_string ?>" class="form-control" />
-                                    Powód: <textarea name="reason" class="form-control"></textarea>
+                                    Data: <input type="date" name="date" value="<?= $today_string ?>" class="form-control" required />
+                                    Powód: <textarea name="reason" class="form-control" required></textarea>
                                     <input type="submit" value="Wyślij" class="form-control" />
                                 </form>
                             </div>
                     </div>
                 </div>
+                <section>
+                    <header class="hello">
+                        Wszystkie moje prośby:
+                    </header>
+                </section>
             </article>
         </main>
         <footer>
