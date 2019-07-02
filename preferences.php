@@ -13,7 +13,7 @@
     {
         $employee_date = filter_input(INPUT_POST, 'date');
         $employee_reason = filter_input(INPUT_POST, 'reason');
-        $check_query = $db->prepare('SELECT * FROM preferences WHERE date="'.$employee_date.'"');
+        $check_query = $db->prepare('SELECT * FROM preferences WHERE date="'.$employee_date.'" AND id_user='.$_SESSION['user_id'].'');
         $check_query->execute();
         if($check_query->rowCount()>0)
         {
@@ -26,6 +26,14 @@
             $_SESSION['output_message'] = '<div class="ok">Pomyślnie dodano nową prośbę!</div>';
         }
     }
+
+    if(isset($_POST['id']))
+    {
+        $delete_query = $db->query('DELETE FROM preferences WHERE id='.$_POST['id']);
+        $_SESSION['output_message'] = '<div class="ok">Pomyślnie usunięto prośbę!</div>';
+    }
+
+    $my_date = $db->query('SELECT id, date, reason FROM preferences WHERE id_user='.$_SESSION['user_id'].' ORDER BY date');
 ?>
 <!DOCTYPE HTML>
 <html lang="pl">
@@ -144,9 +152,47 @@
                     </div>
                 </div>
                 <section>
-                    <header class="hello">
-                        Wszystkie moje prośby:
-                    </header>
+                    <div class="container-fluid">
+                        <header class="hello">
+                            Wszystkie moje prośby:
+                        </header>
+                        <div class="row">
+                            <?php
+                                if($my_date->rowCount()>0)
+                                {
+                                    echo '<table class="table">';
+                                    echo '<thead>';
+                                    echo '<tr>';
+                                    echo '<th scope="col">Data</th>';
+                                    echo '<th scope="col">Powód</th>';
+                                    echo '<th scope="col">#</th>';
+                                    echo '</tr>';
+                                    echo '</thead>';
+                                    echo '<tbody>';
+                                    foreach($my_date as $row)
+                                    {
+                                        
+                                        echo '<tr><td>';
+                                        print_r($row['date']);
+                                        echo '</td>';
+                                        echo '<td>';
+                                        print_r($row['reason']);
+                                        echo '</td>';
+                                        echo '<td>';
+                                        echo '<form method="POST"><input type="hidden" name="id" value="';
+                                        print_r($row['id']);
+                                        echo '"/> <input type="submit" value="Usuń" /></form>';
+                                    }
+                                    echo '</tbody>';
+                                    echo '</table>';
+                                }
+                                else
+                                {
+                                    echo '<div class="col">Brak</div>';
+                                }
+                            ?>
+                        </div>
+                    </div>
                 </section>
             </article>
         </main>
