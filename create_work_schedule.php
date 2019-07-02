@@ -5,6 +5,12 @@
         header('Location: log_in.php');
         exit();
     }
+    if($_SESSION['user_power']<6)
+    {
+        $_SESSION['acces_denied'] = '<div class="error">Brak dostępu!</div>';
+        header('Location: user_profile.php');
+        exit();
+    }
 ?>
 <!DOCTYPE HTML>
 <html lang="pl">
@@ -65,18 +71,19 @@
                             </div>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle active" href="#" data-toggle="dropdown" role="button">Profil</a>
+                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button">Profil</a>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item active" href="user_profile.php">Mój profil</a>
+                                <a class="dropdown-item" href="user_profile.php">Mój profil</a>
                                 <a class="dropdown-item" href="change_password.php">Zmień hasło</a>
                                 <a class="dropdown-item" href="#">###</a>
                             </div>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button">Grafik</a>
+                            <a class="nav-link dropdown-toggle active" href="#" data-toggle="dropdown" role="button">Grafik</a>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" href="work_schedule.php">Grafik</a>
                                 <a class="dropdown-item" href="preferences.php">Preferencje</a>
+                                <a class="dropdown-item active" href="#" >Tworzenie</a>
                             </div>
                         </li>
                         <li class="nav-item"><a class="nav-link" href="log_out.php">Wyloguj</a></li>
@@ -87,54 +94,10 @@
         <main>
             <article>
                 <div class="container-fluid">
-                        <?php
-                            if (isset($_SESSION['acces_denied']))
-                            {
-                                echo $_SESSION['acces_denied'];
-                                unset($_SESSION['acces_denied']);
-                            }
-                        ?>
-                    <header class="hello">
-                        Witaj <?= $_SESSION['user_name'] ?>
-                    </header>
                     <div class="row">
-                        <div class="col-sm-12 user-profile-hello">
-                        
-                            <div>
-                                Twoje uprawnienia to:
-                                <div> 
-                                    <?php
-                                        if($_SESSION['user_power'] == 10) echo 'Administrator';
-                                        if($_SESSION['user_power'] == 9) echo 'Poszukiwacz błędów';
-                                        if($_SESSION['user_power'] == 8) echo 'Prowadzący Stacje';
-                                        if($_SESSION['user_power'] == 7) echo 'Zastępca PSP';
-                                        if($_SESSION['user_power'] == 6) echo 'Instruktor';
-                                        if($_SESSION['user_power'] == 4) echo 'Prowadzący zmianę';
-                                        if($_SESSION['user_power'] == 2) echo 'Pracownik';
-                                        if($_SESSION['user_power'] == 1) echo 'Nowy Pracownik';
-                                        if($_SESSION['user_power'] == 0) echo 'Gość';
-                                    ?>
-                                </div>
-                            </div>
-                            <div>
-                                Ostatnie logowanie:
-                                <div><?= $_SESSION['user_last_login'] ?></div> 
-                            </div>
+                        <div class="col-sm-12">
+
                         </div>
-                        <?php
-                            if($_SESSION['user_power']>5)
-                            {
-                                echo '<div class="col-sm-12 user-profile-border">';
-                                echo '<a href="registration.php">Utwórz nowe konto</a></div>';
-                            }
-                            if($_SESSION['user_power']>7)
-                            {
-                                echo '<div class="col-sm-12 user-profile-border">';
-                                echo '<a href="edit_profile.php">Edycja danych pracownika</a></div>';
-                                echo '<div class="col-sm-12 user-profile-border">';
-                                echo '<a href="create_work_schedule.php">Tworzenie Grafiku</a></div>';
-                            }
-                        ?>
                     </div>
                 </div>
             </article>
