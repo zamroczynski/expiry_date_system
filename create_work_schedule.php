@@ -11,6 +11,19 @@
         header('Location: user_profile.php');
         exit();
     }
+    require_once 'database_connection.php';
+    $select_all_users = $db->query('SELECT * FROM users');
+    $all_users = $select_all_users->fetchAll();
+
+    function getInitials($name)
+    {
+        $words = explode(" ", $name);
+        $initials = null;
+        foreach ($words as $w) {
+            $initials .= $w[0];
+       }
+       echo $initials;
+    }
 ?>
 <!DOCTYPE HTML>
 <html lang="pl">
@@ -96,7 +109,280 @@
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-sm-12">
-
+                            <header style="margin: 10px;">
+                                Miesiąc: 
+                                <select>
+                                    <option value="styczen">Styczeń</option>
+                                    <option value="luty">Luty</option>
+                                    <option value="marzec">Marzec</option>
+                                    <option value="kwiecien">Kwiecień</option>
+                                    <option value="maj">Maj</option>
+                                    <option value="czerwiec">Czerwiec</option>
+                                    <option value="lipiec">Lipiec</option>
+                                    <option value="sierpien">Sierpień</option>
+                                    <option value="wrzesien">Wrzesień</option>
+                                    <option value="pazdziernik">Październik</option>
+                                    <option value="listopad">Listopad</option>
+                                    <option value="grudzien">Grudzien</option>
+                                </select>
+                            </header>
+                            <table class="table table-dark table-bordered table-hover table-sm">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">1</th>
+                                        <th scope="col">2</th>
+                                        <th scope="col">3</th>
+                                        <th scope="col">4</th>
+                                        <th scope="col">5</th>
+                                        <th scope="col">6</th>
+                                        <th scope="col">7</th>
+                                        <th scope="col">8</th>
+                                        <th scope="col">9</th>
+                                        <th scope="col">10</th>
+                                        <th scope="col">11</th>
+                                        <th scope="col">12</th>
+                                        <th scope="col">13</th>
+                                        <th scope="col">14</th>
+                                        <th scope="col">15</th>
+                                        <th scope="col">16</th>
+                                        <th scope="col">17</th>
+                                        <th scope="col">18</th>
+                                        <th scope="col">19</th>
+                                        <th scope="col">20</th>
+                                        <th scope="col">21</th>
+                                        <th scope="col">22</th>
+                                        <th scope="col">23</th>
+                                        <th scope="col">24</th>
+                                        <th scope="col">25</th>
+                                        <th scope="col">26</th>
+                                        <th scope="col">27</th>
+                                        <th scope="col">28</th>
+                                        <th scope="col">29</th>
+                                        <th scope="col">30</th>
+                                        <th scope="col">31</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr scope="row" id="d1">
+                                        <td>D1</td>
+                                        <td>
+                                            <select class="users">
+                                                <?php
+                                                    foreach($all_users as $row)
+                                                    {
+                                                        echo '<option value=';
+                                                        echo $row['id'];
+                                                        echo '>';
+                                                        echo getInitials($row['name']);
+                                                        echo '</option>';
+                                                    }
+                                                ?>
+                                            </select>
+                                        </td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                    </tr>
+                                    <tr scope="row" id="d2">
+                                        <td>D2</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                    </tr>
+                                    <tr scope="row" id="d3">
+                                        <td>D3</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                    </tr>
+                                    <tr scope="row" id="n1">
+                                        <td>N1</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                    </tr>
+                                    <tr scope="row" id="n2">
+                                        <td>N2</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                    </tr>
+                                    <tr scope="row" id="n3">
+                                        <td>N3</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                        <td>brak</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
