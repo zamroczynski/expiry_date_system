@@ -145,6 +145,8 @@
                             <div class="form-row">
                                 <form method="POST">
                                     Data: <input type="date" name="date" value="<?= $today_string ?>" class="form-control" required />
+                                    Możesz przyjść? <input type="radio" name="can_come" value="0" class="form-input">Nie
+                                    <input type="radio" name="can_come" value="1" class="form-control">Tak
                                     Powód: <textarea name="reason" class="form-control" required></textarea>
                                     <input type="submit" value="Wyślij" class="form-control" />
                                 </form>
@@ -154,7 +156,7 @@
                 <section>
                     <div class="container-fluid">
                         <header class="hello">
-                            Wszystkie moje prośby:
+                            <h1>Wszystkie moje prośby:</h1>
                         </header>
                         <div class="row">
                             <?php

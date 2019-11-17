@@ -209,3 +209,11 @@ textarea
 {
     margin-top: 10px;
 }
+.table
+{
+    color: white;
+}
+.table > tr
+{
+    padding-bottom: 0px;
+}
