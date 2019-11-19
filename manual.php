@@ -1,51 +1,26 @@
 <?php
     session_start();
     require_once 'database_connection.php';
-    if (isset($_SESSION['logged']))
+    $today = new DateTime();
+    $date_string = $today->format('Y-m-d');
+    if(isset($_POST['date_to_search']))
     {
-        header('Location: user_profile.php');
-        exit();
+        $date_string = filter_input(INPUT_POST, 'date_to_search');
+        $date_query = 'SELECT expiry_date.id, expiry_date.date, products.name FROM expiry_date INNER JOIN products ON 
+        products.id=expiry_date.id_product WHERE expiry_date.date="'.$date_string.'" ORDER BY expiry_date.id';
     }
-    if ((isset($_POST['login'])) || (isset($_POST['password'])))
+    else
     {
-        $login = filter_input(INPUT_POST, 'login');
-        $password = $_POST['password'];
-        require_once 'database_connection.php';
-        $user_query = $db->prepare('SELECT users.id, users.login, users.password, users.email, users.name, users.power, users.last_login 
-        FROM users 
-        WHERE users.login=:login');
-        $user_query->bindValue(':login', $login, PDO::PARAM_STR);
-        $user_query->execute();
-        $user = $user_query->fetch();
-        if(password_verify($password, $user['password']))
-        {
-            if ($user)
-            {
-                $_SESSION['logged'] = true;
-                $_SESSION['user_id'] = $user['id'];
-                $_SESSION['user_name'] = $user['name'];
-                $_SESSION['user_pass'] = $user['password'];
-                $_SESSION['user_power'] = $user['power'];
-                $_SESSION['user_email'] = $user['email'];
-                $_SESSION['user_last_login'] = $user['last_login'];
-                $today = new DateTime();
-                $today_string = $today->format('Y-m-d H:i:s');
-                $db->query('UPDATE users SET last_login="'.$today_string.'"');
-                header('Location: user_profile.php');
-                exit();
-            }
-        }
-        else
-        {
-            $_SESSION['error'] = '<div class="error">Nie prawidłowy login lub hasło</div>';
-        }
+        $date_query = 'SELECT expiry_date.id, expiry_date.date, products.name FROM expiry_date INNER JOIN products ON
+        products.id=expiry_date.id_product WHERE expiry_date.date="'.$date_string.'" ORDER BY expiry_date.id';
     }
+    
 ?>
 <!DOCTYPE HTML>
 <html lang="pl">
     <head>
-    <link rel="icon" href="img/icon.png">
         <title>Stacja Paliw 4449</title>
+        <link rel="icon" href="img/icon.png">
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
@@ -77,8 +52,19 @@
                     <ul class="navbar-nav">
                         <li class="nav-item"><a class="nav-link" href="index.php">Terminy</a></li>
                         <li class="nav-item"><a class="nav-link" href="messages.php">Wiadomości</a></li>
-                        <li class="nav-item"><a class="nav-link" href="manual.php">Podręcznik stacji</a></li>
-                        <li class="nav-item"><a class="nav-link active" href="log_in.php">Zaloguj</a></li>
+                        <li class="nav-item"><a class="nav-link active" href="manual.php">Podręcznik stacji</a></li>
+                        <li class="nav-item"><a class="nav-link" href="log_in.php">
+                        <?php
+                            if(isset($_SESSION['logged']))
+                            {
+                                echo 'Panel Stacji';
+                            }
+                            else
+                            {
+                                echo 'Zaloguj';
+                            }
+                        ?>
+                        </a></li>
                     </ul>
                 </div>
             </nav>
@@ -86,23 +72,32 @@
         <main>
             <article>
                 <div class="container-fluid">
-                    <header>Logowanie</header>
+                    <header>Produkty z datą przydatności do <?= $date_string ?></header>
                     <div class="row">
-                        <div class="col-sm-12 login">
                             <?php
-                                if(isset($_SESSION['error']))
+                                $result = $db->query($date_query);
+                                if ($result->rowCount() > 0)
                                 {
-                                    echo $_SESSION['error'];
-                                    unset($_SESSION['error']);
+                                    foreach($result as $row) {
+                                        echo '<div class="col-sm-12 product">';
+                                        print_r($row['name']);
+                                        echo "</div>";
+                                    }
+                                }
+                                else
+                                {
+                                    echo '<div class="col-sm-12">';
+                                    echo "Brak produktów, które się terminują!";
+                                    echo '</div>';
                                 }
                             ?>
-                            <form method="POST">
-                                <div><input type="text" name="login" placeholder="Twój login..." required></div>
-                                <div><input type="password" name="password" placeholder="Twoje hasło..." required></div>
-                                <input type="submit" value="Zaloguj się">
-                            </form>
-                        </div>
                     </div>
+                </div>
+                <div class="small_search">
+                    <form method="post">
+                        Podaj datę: <input type="date" name="date_to_search" value="<?= $date_string ?>" />
+                        <input type="submit" value="Pokaż" />
+                    </form>
                 </div>
             </article>
         </main>
