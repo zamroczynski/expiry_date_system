@@ -160,6 +160,13 @@
                             </div>
                         </li>
                         <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button">Podręcznik stacji</a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="manual.php">Istniejące instrukcje</a>
+                                <a class="dropdown-item" href="edit_manual.php">Dodaj/usuń instrukcje</a>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle active" href="#" data-toggle="dropdown" role="button">Wiadomości</a>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item active" href="adding_message.php">Dodaj Wiadomość</a>

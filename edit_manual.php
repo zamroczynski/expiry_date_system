@@ -5,53 +5,30 @@
         header('Location: log_in.php');
         exit();
     }
-    if($_SESSION['user_power']<2)
+    if($_SESSION['user_power']<4)
     {
         $_SESSION['acces_denied'] = '<div class="error">Brak dostępu!</div>';
         header('Location: user_profile.php');
         exit();
     }
-    require_once 'database_connection.php';
-    $today = new DateTime();
-    $today_string = $today->format('Y-m-d');
-    $string_form_product_search = '
+    $form_for_text = '
         <div>
-            <form method="POST">
-                <div><input type="text" name="product_name" placeholder="Wpisz nazwę produktu"></div>
-                <div><input type="submit" value="Wyszukaj"></div>
+            <form method="POST" enctype="multipart/form-data">
+                <div><input type="text" name="title" class="form-control" value="Tytuł..." /></div>
+                <div><textarea name="content" class="form-control">Tu narazie jest ściernisko...</textarea></div>
+                <input type="submit" value="Dodaj" />
             </form>
         </div>';
-    if (isset($_POST['product_name']))
+    if (isset($_POST['content']))
     {
-        $product_name = filter_input(INPUT_POST, 'product_name');
-        $product_query = $db->prepare('SELECT products.id, products.name 
-        FROM products 
-        WHERE products.name LIKE "%'.$product_name.'%"');
-    }
-    if (isset($_POST['expiry_date']))
-    {
-        $expiry_date = filter_input(INPUT_POST, 'expiry_date');
-        $radio_choose = $_POST['radio_name'];
-        $expiry_test_query = $db->prepare('SELECT products.id, expiry_date.id_product, expiry_date.date 
-        FROM expiry_date INNER JOIN products ON products.id=expiry_date.id_product 
-        WHERE expiry_date.date="'.$expiry_date.'" AND products.id="'.$radio_choose.'"');
-        $expiry_test_query->execute();
-        if ($expiry_test_query->rowCount()>0)
-        {
-            $_SESSION['error'] = '<div class="error">Istnieje już taki termin!</div>';
-        }
-        else
-        {
-            
-            $expiry_date_insert_query = $db->query('INSERT INTO expiry_date VALUES (null, '.$radio_choose.', "'.$expiry_date.'", null)');
-            $_SESSION['output_message'] = '<div class="ok">Pomyślnie dodano nowy termin</div>';
-        }
+        $content = nl2br(filter_input(INPUT_POST, 'content'));
+
     }
 ?>
 <!DOCTYPE HTML>
 <html lang="pl">
     <head>
-        <link rel="icon" href="img/icon.png">
+    <link rel="icon" href="img/icon.png">
         <title>Stacja Paliw 4449</title>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -82,13 +59,11 @@
                 </button>
                 <div class="collapse navbar-collapse" id="mainmenu">
                     <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link" href="index.php">Strona Główna</a></li>
+                        <li class="nav-item"><a class="nav-link" href="index.php">Strona Główna</a></li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle active" href="#" data-toggle="dropdown" role="button">
-                                Terminy
-                            </a>
+                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button">Terminy</a>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item active" href="adding_date.php">Dodaj Termin</a>
+                                <a class="dropdown-item" href="adding_date.php">Dodaj Termin</a>
                                 <a class="dropdown-item" href="edit_date.php">Edytuj Termin</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="generate_report.php">Generuj raport</a>
@@ -102,10 +77,10 @@
                             </div>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button">Podręcznik stacji</a>
+                            <a class="nav-link dropdown-toggle active" href="#" data-toggle="dropdown" role="button">Podręcznik stacji</a>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" href="manual.php">Istniejące instrukcje</a>
-                                <a class="dropdown-item" href="edit_manual.php">Dodaj/usuń instrukcje</a>
+                                <a class="dropdown-item active" href="edit_manual.php">Dodaj/usuń instrukcje</a>
                             </div>
                         </li>
                         <li class="nav-item dropdown">
@@ -138,60 +113,11 @@
         <main>
             <article>
                 <div class="container-fluid">
-                    <header>
-                        Dodawanie Terminu
-                    </header>
                     <div class="row">
-                            <?php
-                                if (isset($_POST['product_name']))
-                                {
-                                    $product_query->execute();
-                                    $products = $product_query->fetchAll();
-                                    if ($products)
-                                    {
-                                        echo '<form method="post">';
-                                        echo '<div class="form-group row">';
-                                        foreach($products as $row)
-                                        {
-                                            echo '<label class="col-sm-12 col-md-6 col-lg-4 col-form-label">';
-                                            echo '<input type="radio" name="radio_name" value="'.$row['id'].'" />';
-                                            echo '<div>';
-                                            echo $row['name'];
-                                            echo '</div></label>';
-                                        }
-                                        echo '</div><input type="date" name="expiry_date" value="'.$today_string.'" /> 
-                                            <input type="submit" value="Zapisz termin" /></form>';
-                                    }
-                                    else
-                                    {
-                                        echo '<div class="col-sm-12">';
-                                        echo '<h2>Brak Wyniku!</h2>';
-                                        echo $string_form_product_search;
-                                        echo '</div>';
-                                    }
-                                    echo '</ol>';
-                                }
-                                else
-                                {
-                                    echo '<div class="col-sm-12">';
-                                    echo $string_form_product_search;
-                                    echo '</div>';
-                                }
-                                if (isset($_SESSION['error']))
-                                {
-                                    echo '<div class="col-sm-12">';
-                                    echo $_SESSION['error'];
-                                    echo '</div>';
-                                    unset($_SESSION['error']);
-                                }
-                                if (isset($_SESSION['output_message']))
-                                {
-                                    echo '<div class="col-sm-12">';
-                                    echo $_SESSION['output_message'];
-                                    echo '</div>';
-                                    unset($_SESSION['output_message']);
-                                }
-                            ?>
+                        <div class="col-sm-12">
+                        <header>Tworzenie nowej instrukcji</header>
+                            <?= $form_for_text ?>
+                        </div>
                     </div>
                 </div>
             </article>
