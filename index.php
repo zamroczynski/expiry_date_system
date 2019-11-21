@@ -35,6 +35,8 @@
         <!--[if lt IE 9]>
         <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"</scripts>
         <![endif]-->
+        <script src="http://cookiealert.sruu.pl/CookieAlert-latest.min.js"></script>
+        <script>CookieAlert.init();</script>
     </head>
     <body>
         <header>
