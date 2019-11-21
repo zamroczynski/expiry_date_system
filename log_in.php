@@ -77,6 +77,7 @@
                     <ul class="navbar-nav">
                         <li class="nav-item"><a class="nav-link" href="index.php">Terminy</a></li>
                         <li class="nav-item"><a class="nav-link" href="messages.php">Wiadomości</a></li>
+                        <li class="nav-item"><a class="nav-link" href="manual.php">Podręcznik stacji</a></li>
                         <li class="nav-item"><a class="nav-link active" href="log_in.php">Zaloguj</a></li>
                     </ul>
                 </div>

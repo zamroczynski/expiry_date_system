@@ -1,20 +1,8 @@
 <?php
     session_start();
     require_once 'database_connection.php';
-    $today = new DateTime();
-    $date_string = $today->format('Y-m-d');
-    if(isset($_POST['date_to_search']))
-    {
-        $date_string = filter_input(INPUT_POST, 'date_to_search');
-        $date_query = 'SELECT expiry_date.id, expiry_date.date, products.name FROM expiry_date INNER JOIN products ON 
-        products.id=expiry_date.id_product WHERE expiry_date.date="'.$date_string.'" ORDER BY expiry_date.id';
-    }
-    else
-    {
-        $date_query = 'SELECT expiry_date.id, expiry_date.date, products.name FROM expiry_date INNER JOIN products ON
-        products.id=expiry_date.id_product WHERE expiry_date.date="'.$date_string.'" ORDER BY expiry_date.id';
-    }
-    
+    $allFiles = scandir("instructions/");
+    $files = array_diff($allFiles, array('.', '..'));
 ?>
 <!DOCTYPE HTML>
 <html lang="pl">
@@ -35,8 +23,6 @@
         <!--[if lt IE 9]>
         <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"</scripts>
         <![endif]-->
-        <script src="http://cookiealert.sruu.pl/CookieAlert-latest.min.js"></script>
-        <script>CookieAlert.init();</script>
     </head>
     <body>
         <header>
@@ -52,9 +38,9 @@
                 </button>
                 <div class="collapse navbar-collapse" id="mainmenu">
                     <ul class="navbar-nav">
-                        <li class="nav-item"><a class="nav-link active" href="index.php">Terminy</a></li>
+                        <li class="nav-item"><a class="nav-link" href="index.php">Terminy</a></li>
                         <li class="nav-item"><a class="nav-link" href="messages.php">Wiadomości</a></li>
-                        <li class="nav-item"><a class="nav-link" href="manual.php">Podręcznik stacji</a></li>
+                        <li class="nav-item"><a class="nav-link active" href="manual.php">Podręcznik stacji</a></li>
                         <li class="nav-item"><a class="nav-link" href="log_in.php">
                         <?php
                             if(isset($_SESSION['logged']))
@@ -74,33 +60,30 @@
         <main>
             <article>
                 <div class="container-fluid">
-                    <header>Produkty z datą przydatności do <?= $date_string ?></header>
+                    <header>Instrukcje stacyjne</header>
                     <div class="row">
+                        <div class="list-group col-sm-12">
                             <?php
-                                $result = $db->query($date_query);
-                                if ($result->rowCount() > 0)
+                                if(isset($_SESSION['error']))
                                 {
-                                    foreach($result as $row) {
-                                        echo '<div class="col-sm-12 product">';
-                                        print_r($row['name']);
-                                        echo "</div>";
-                                    }
+                                    echo $_SESSION['error'];
+                                    unset($_SESSION['error']);
                                 }
                                 else
                                 {
-                                    echo '<div class="col-sm-12">';
-                                    echo "Brak produktów, które się terminują!";
-                                    echo '</div>';
+                                    foreach($files as $a)
+                                    {
+                                        echo '<a href="instructions/'.$a.'" class="list-group-item list-group-item-action">';
+                                        echo basename($a,".php");
+                                        echo "</a>";
+                                    }
                                 }
+                                
                             ?>
+                        </div>
                     </div>
                 </div>
-                <div class="small_search">
-                    <form method="post">
-                        Podaj datę: <input type="date" name="date_to_search" value="<?= $date_string ?>" />
-                        <input type="submit" value="Pokaż" />
-                    </form>
-                </div>
+                
             </article>
         </main>
         <footer>
