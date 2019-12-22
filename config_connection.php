@@ -4,6 +4,6 @@
 		'host' => 'localhost',
 		'user' => 'root',
 		'password' => '',
-		'database' => 'db_expiry_sys'
+		'database' => 'zamrix_db-expiry-sys'
 	];
 ?>

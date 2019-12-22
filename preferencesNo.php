@@ -146,20 +146,13 @@
                         ?>
                         <div style="margin-top: 20px;"></div>
                     <div class="row">
-                        <div class="col-sm-6">
-                        <a href="preferencesYes.php">
-                            <div class="availableBox">
-                                    Chce podać dni, w którę mogę przyjść
-                            </div>
-                        </a>
+                        <div class="col-sm-12">
+                            <a class="btn btn-secondary" href="preferences.php" role="button">Powrót</a>
+                            <header class="hello">
+                                Wprowadź dni, w które nie możesz przyjść do pracy
+                            </header>
                         </div>
-                        <div class="col-sm-6">
-                            <a href="preferencesNo.php">
-                                <div class="inaccessibleBox">
-                                    Chce podać dni, w którę NIE mogę przyjść
-                                </div>
-                            </a>
-                        </div>
+                        
                     </div>
                 </div>
                 <section>
