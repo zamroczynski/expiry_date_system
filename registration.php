@@ -76,6 +76,8 @@
                                 Terminy
                             </a>
                             <div class="dropdown-menu">
+                                <a class="dropdown-item" href="index.php">Dzisiejsze Terminy</a>
+                                <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="adding_date.php">Dodaj Termin</a>
                                 <a class="dropdown-item" href="edit_date.php">Edytuj Termin</a>
                                 <div class="dropdown-divider"></div>
@@ -87,13 +89,6 @@
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" href="adding_product.php">Dodaj Produkt</a>
                                 <a class="dropdown-item" href="edit_product.php">Edytuj Produkt</a>
-                            </div>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button">Podręcznik stacji</a>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="manual.php">Istniejące instrukcje</a>
-                                <a class="dropdown-item" href="edit_manual.php">Dodaj/usuń instrukcje</a>
                             </div>
                         </li>
                         <li class="nav-item dropdown">
@@ -109,13 +104,6 @@
                                 <a class="dropdown-item active" href="user_profile.php">Mój profil</a>
                                 <a class="dropdown-item" href="change_password.php">Zmień hasło</a>
                                 <a class="dropdown-item" href="#">###</a>
-                            </div>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button">Grafik</a>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="work_schedule.php">Grafik</a>
-                                <a class="dropdown-item" href="preferences.php">Preferencje</a>
                             </div>
                         </li>
                         <li class="nav-item"><a class="nav-link" href="log_out.php">Wyloguj</a></li>
