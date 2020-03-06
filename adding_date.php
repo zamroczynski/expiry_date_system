@@ -24,7 +24,23 @@
         fwrite($fp, json_encode($json));
         fclose($fp);
     }
-    
+
+    if(isset($_POST['choose']))
+    {
+        $sql = 'SELECT * FROM expiry_date WHERE date="'.$_POST['date'].'" AND id_product='.$_POST['choose'].';';
+        $result = $db->query($sql);
+        if($result->rowCount() > 0)
+        {
+            $result->rowCount();
+            $_SESSION['error'] = '<div class="error">Istnieje już taki termin!</div>';
+        }
+        else
+        {
+            $sql = 'INSERT INTO expiry_date VALUES (null, '.$_POST['choose'].', "'.$_POST['date'].'", null);';
+            $db->query($sql);
+            $_SESSION['succes'] = '<div class="ok">Pomyślnie dodano nowy termin!</div>';
+        }
+    }
 ?>
 <!DOCTYPE HTML>
 <html lang="pl">
@@ -111,6 +127,18 @@
                     </header>
                     <div class="row">
                         <div class="col-sm-12 center">
+                            <?php
+                            if(isset($_SESSION['error']))
+                            {
+                                echo $_SESSION['error'];
+                                unset($_SESSION['error']);
+                            }
+                            if(isset($_SESSION['succes']))
+                            {
+                                echo $_SESSION['succes'];
+                                unset($_SESSION['succes']);
+                            }
+                            ?>
                             <form method="POST">
                                 <input type="text" name="search" id="search" placeholder="Szukaj towaru" />
                                 <input type="submit" name="download" value="Pobierz produkty" />
@@ -130,6 +158,7 @@
                                     </thead>
                                     <tbody id="result"></tbody>
                                 </table>
+                                <input type="date" value="<?= $today_string ?>" name="date" />
                                 <input type="submit" value="Wyślij" />
                             </form>
                         </div>
@@ -157,11 +186,12 @@
                                 input.type = "radio";
                                 input.value = value.id;
                                 input.name = "choose";
-                                input.class = "dym"
+                                input.class = "dym";
                                 var $tr = $('<tr>').append(
+                                    $('<label>').append(
                                     $('<td>').text(value.id),
                                     $('<td>').text(value.name),
-                                    $('<td>').append(input)
+                                    $('<td>').append(input))
                                 ).appendTo('#result');
                                 
                                 //console.log($tr.wrap('<p>').html());
@@ -171,5 +201,6 @@
                 });
             });
         </script>
+        <script src="js/bootstrap.min.js"></script>
     </body>
 </html>

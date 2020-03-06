@@ -50,10 +50,6 @@ input[type=submit], button
     border-radius: 4px;
     cursor: pointer;
 }
-input[type=file]
-{
-    
-}
 .myfile
 {
     background-color: rgb(110, 1, 1);
@@ -90,8 +86,7 @@ label
     background-color: #5f0303;
     cursor: pointer;
     text-align: center;
-    min-width: 80px;
-    min-height: 80px;
+    display: contents;
 }
 label:nth-child(odd)
 {
