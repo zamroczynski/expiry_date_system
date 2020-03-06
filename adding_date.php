@@ -14,39 +14,17 @@
     require_once 'database_connection.php';
     $today = new DateTime();
     $today_string = $today->format('Y-m-d');
-    $string_form_product_search = '
-        <div>
-            <form method="POST">
-                <div><input type="text" name="product_name" placeholder="Wpisz nazwę produktu"></div>
-                <div><input type="submit" value="Wyszukaj"></div>
-            </form>
-        </div>';
-    if (isset($_POST['product_name']))
+    
+    if(isset($_POST['download']))
     {
-        $product_name = filter_input(INPUT_POST, 'product_name');
-        $product_query = $db->prepare('SELECT products.id, products.name 
-        FROM products 
-        WHERE products.name LIKE "%'.$product_name.'%"');
+        $query = 'SELECT * FROM products';
+        $json_result = $db->query($query);
+        $json = $json_result->fetchAll(PDO::FETCH_ASSOC);
+        $fp = fopen('towary.json', 'w');
+        fwrite($fp, json_encode($json));
+        fclose($fp);
     }
-    if (isset($_POST['expiry_date']))
-    {
-        $expiry_date = filter_input(INPUT_POST, 'expiry_date');
-        $radio_choose = $_POST['radio_name'];
-        $expiry_test_query = $db->prepare('SELECT products.id, expiry_date.id_product, expiry_date.date 
-        FROM expiry_date INNER JOIN products ON products.id=expiry_date.id_product 
-        WHERE expiry_date.date="'.$expiry_date.'" AND products.id="'.$radio_choose.'"');
-        $expiry_test_query->execute();
-        if ($expiry_test_query->rowCount()>0)
-        {
-            $_SESSION['error'] = '<div class="error">Istnieje już taki termin!</div>';
-        }
-        else
-        {
-            
-            $expiry_date_insert_query = $db->query('INSERT INTO expiry_date VALUES (null, '.$radio_choose.', "'.$expiry_date.'", null)');
-            $_SESSION['output_message'] = '<div class="ok">Pomyślnie dodano nowy termin</div>';
-        }
-    }
+    
 ?>
 <!DOCTYPE HTML>
 <html lang="pl">
@@ -63,10 +41,12 @@
         
         <link href="https://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+        
         <!--[if lt IE 9]>
         <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"</scripts>
         <![endif]-->
+
+        <script src="js/jquery-3.4.1.min.js"></script>
     </head>
     <body>
         <header>
@@ -130,56 +110,29 @@
                         Dodawanie Terminu
                     </header>
                     <div class="row">
-                            <?php
-                                if (isset($_POST['product_name']))
-                                {
-                                    $product_query->execute();
-                                    $products = $product_query->fetchAll();
-                                    if ($products)
-                                    {
-                                        echo '<form method="post">';
-                                        echo '<div class="form-group row">';
-                                        foreach($products as $row)
-                                        {
-                                            echo '<label class="col-sm-12 col-md-6 col-lg-4 col-form-label">';
-                                            echo '<input type="radio" name="radio_name" value="'.$row['id'].'" />';
-                                            echo '<div>';
-                                            echo $row['name'];
-                                            echo '</div></label>';
-                                        }
-                                        echo '</div><input type="date" name="expiry_date" value="'.$today_string.'" /> 
-                                            <input type="submit" value="Zapisz termin" /></form>';
-                                    }
-                                    else
-                                    {
-                                        echo '<div class="col-sm-12">';
-                                        echo '<h2>Brak Wyniku!</h2>';
-                                        echo $string_form_product_search;
-                                        echo '</div>';
-                                    }
-                                    echo '</ol>';
-                                }
-                                else
-                                {
-                                    echo '<div class="col-sm-12">';
-                                    echo $string_form_product_search;
-                                    echo '</div>';
-                                }
-                                if (isset($_SESSION['error']))
-                                {
-                                    echo '<div class="col-sm-12">';
-                                    echo $_SESSION['error'];
-                                    echo '</div>';
-                                    unset($_SESSION['error']);
-                                }
-                                if (isset($_SESSION['output_message']))
-                                {
-                                    echo '<div class="col-sm-12">';
-                                    echo $_SESSION['output_message'];
-                                    echo '</div>';
-                                    unset($_SESSION['output_message']);
-                                }
-                            ?>
+                        <div class="col-sm-12 center">
+                            <form method="POST">
+                                <input type="text" name="search" id="search" placeholder="Szukaj towaru" />
+                                <input type="submit" name="download" value="Pobierz produkty" />
+                            </form>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 center">
+                            <form method="POST">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">ID</th>
+                                            <th scope="col">Nazwa</th>
+                                            <th scope="col">#</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="result"></tbody>
+                                </table>
+                                <input type="submit" value="Wyślij" />
+                            </form>
+                        </div>
                     </div>
                 </div>
             </article>
@@ -187,12 +140,36 @@
         <footer>
             Stacja 4449 Bydgoszcz by Damian Zamroczynski &copy; 2019 Kontakt: damianzamroczynski@gmail.com
         </footer>
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" 
-                integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" 
-                crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" 
-                integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" 
-                crossorigin="anonymous"></script>
-        <script src="js/bootstrap.min.js"></script>
+        
+        <script>
+            $(document).ready(function(){
+                $.ajaxSetup({ cache: false});
+                $('#search').keyup(function(){
+                    $('#result').html('');
+                    $('#state').val('');
+                    var searchField = $('#search').val();
+                    var expression = new RegExp(searchField, "i");
+                    $.getJSON('towary.json', function(data){
+                        $.each(data, function(key, value){
+                            if (value.name.search(expression) != -1)
+                            {
+                                var input = document.createElement("input");
+                                input.type = "radio";
+                                input.value = value.id;
+                                input.name = "choose";
+                                input.class = "dym"
+                                var $tr = $('<tr>').append(
+                                    $('<td>').text(value.id),
+                                    $('<td>').text(value.name),
+                                    $('<td>').append(input)
+                                ).appendTo('#result');
+                                
+                                //console.log($tr.wrap('<p>').html());
+                            }
+                        });
+                    });
+                });
+            });
+        </script>
     </body>
 </html>

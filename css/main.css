@@ -85,16 +85,6 @@ textarea
 {
     min-height: 200px;
 }
-input[type=radio]
-{
-    border-radius: 50%;
-    height: 18px;
-    width: 18px;
-    cursor: pointer;
-    position: absolute;
-    top: 30px;
-    left: 30px;
-}
 label
 {
     background-color: #5f0303;
@@ -208,4 +198,16 @@ textarea
 .img-fluid
 {
     margin-top: 10px;
+}
+.right
+{
+    text-align: right;
+}
+.center
+{
+    text-align: center;
+}
+.table
+{
+    color: white;
 }
