@@ -14,34 +14,39 @@
     require_once 'database_connection.php';
     $today = new DateTime();
     $today_string = $today->format('Y-m-d');
-    $string_form_product_search = '
-        <div>
-            <form method="POST">
-                <div><input type="text" name="product_name" placeholder="Wpisz nazwę produktu"></div>
-                <div><input type="submit" value="Wyszukaj"></div>
-            </form>
-        </div>';
-    if (isset($_POST['product_name']))
+    
+    function downloadTerminy($db)
     {
-        $product_name = filter_input(INPUT_POST, 'product_name');
-        $product_query = $db->prepare('SELECT expiry_date.id, expiry_date.date, products.name 
-        FROM expiry_date INNER JOIN products ON products.id=expiry_date.id_product 
-        WHERE products.name LIKE "%'.$product_name.'%" ORDER BY expiry_date.date');
+        
+        $query = 'SELECT expiry_date.id, products.name, expiry_date.date FROM expiry_date
+                    INNER JOIN products ON products.id=expiry_date.id_product ORDER BY expiry_date.date;';
+        $json_result = $db->query($query);
+        $json = $json_result->fetchAll(PDO::FETCH_ASSOC);
+        $fp = fopen('terminy.json', 'w');
+        fwrite($fp, json_encode($json));
+        fclose($fp);
     }
-    if (isset($_POST['date_to_delete']))
+
+    if(isset($_POST['download']))
     {
-        $date_to_delete = $_POST['radio_name'];
-        $delete_query = $db->query('DELETE FROM expiry_date WHERE expiry_date.id="'.$date_to_delete.'"');
-        $_SESSION['delete_message'] = '<div class="ok">Termin został usunięty</div>';
+        downloadTerminy($db);
+        $_SESSION['succes'] = '<div class="ok">Pobrano nowe terminy!</div>';
     }
-    if (isset($_POST['edit_date']))
+
+    if(isset($_POST['delete']))
     {
-        $new_expiry_date = filter_input(INPUT_POST, 'edit_date');
-        $old_expiry_date = $_POST['radio_name'];
-        $edit_query = $db->query('UPDATE expiry_date 
-        SET date="'.$new_expiry_date.'" 
-        WHERE expiry_date.id="'.$old_expiry_date.'"');
-        $_SESSION['output_message'] = '<div class="ok">Termin został zmieniony!</div>';
+        $sql = 'DELETE FROM expiry_date WHERE id='.$_POST['choose'];
+        $db->query($sql);
+        downloadTerminy($db);
+        $_SESSION['succes'] = '<div class="ok">Termin usunięty!</div>';
+    }
+
+    if(isset($_POST['changeDate']))
+    {
+        $sql = 'UPDATE expiry_date SET date="'.$_POST['date'].'" WHERE id='.$_POST['choose'];
+        $db->query($sql);
+        downloadTerminy($db);
+        $_SESSION['succes'] = '<div class="ok">Termin zmieniony!</div>';
     }
 ?>
 <!DOCTYPE HTML>
@@ -63,6 +68,18 @@
         <!--[if lt IE 9]>
         <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"</scripts>
         <![endif]-->
+
+        <script src="js/jquery-3.4.1.min.js"></script>
+
+        <script>
+            function warming() {
+                if(!confirm("Czy na pewno usunąć?"))
+                {
+                    return false;
+                }
+            }
+        </script>
+
     </head>
     <body>
         <header>
@@ -126,66 +143,44 @@
                         Edycja Terminu
                     </header>
                     <div class="row">
+                        <div class="col-sm-12 center">
                             <?php
-                                if (isset($_POST['product_name']))
-                                {
-                                    $product_query->execute();
-                                    $products = $product_query->fetchAll();
-                                    if ($products)
-                                    {
-                                        echo '<form method="post">';
-                                        echo '<div class="form-group row">';
-                                        foreach($products as $row)
-                                        {
-                                            echo '<label class="col-sm-12 col-md-6 col-lg-4 col-form-label">';
-                                            echo '<input type="radio" name="radio_name" value="'.$row['id'].'">';
-                                            echo '<div>';
-                                            echo $row['name'];
-                                            echo '<div>';
-                                            echo $row['date'];
-                                            echo '</div></div></label>';
-                                        }
-                                        echo '</div><input type="date" name="edit_date" value="'.$today_string.'" /><input type="submit" value="Edytuj termin"> 
-                                        <input type="submit" name="date_to_delete" value="USUŃ TERMIN" onclick="return  confirm(\'Czy napewno usunąć? \')" /></form>';
-                                    }
-                                    else
-                                    {
-                                        echo '<div class="col-sm-12">';
-                                        echo '<h2>Brak Wyniku!</h2>';
-                                        echo $string_form_product_search;
-                                        echo '</div>';
-                                    }
-                                    echo '</ol>';
-                                }
-                                else
-                                {
-                                    echo '<div class="col-sm-12">';
-                                    echo $string_form_product_search;
-                                    echo '</div>';
-                                }
-                                if (isset($_SESSION['error']))
-                                {
-                                    echo '<div class="col-sm-12">';
-                                    echo $_SESSION['error'];
-                                    echo '</div>';
-                                    unset($_SESSION['error']);
-                                }
-                                if (isset($_SESSION['delete_message']))
-                                {
-                                    echo '<div class="col-sm-12">';
-                                    echo $_SESSION['delete_message'];
-                                    echo '</div>';
-                                    unset($_SESSION['delete_message']);
-                                }
-                                else if (isset($_SESSION['output_message']))
-                                {
-                                    echo '<div class="col-sm-12">';
-                                    echo $_SESSION['output_message'];
-                                    echo '</div>';
-                                    unset($_SESSION['output_message']);
-                                }
-                                
+                            if(isset($_SESSION['error']))
+                            {
+                                echo $_SESSION['error'];
+                                unset($_SESSION['error']);
+                            }
+                            if(isset($_SESSION['succes']))
+                            {
+                                echo $_SESSION['succes'];
+                                unset($_SESSION['succes']);
+                            }
                             ?>
+                            <form method="POST">
+                                <input type="text" name="search" id="search" placeholder="Wpisz nazwę towaru" />
+                                <input type="submit" name="download" value="Pobierz terminy" />
+                            </form>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 center">
+                            <form method="POST">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">ID</th>
+                                            <th scope="col">Nazwa</th>
+                                            <th scope="col">Data</th>
+                                            <th scope="col">#</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="result"></tbody>
+                                </table>
+                                <input type="date" value="<?= $today_string ?>" name="date" />
+                                <input type="submit" value="Zmień datę" name="changeDate" />
+                                <input type="submit" value="USUŃ" name="delete" onclick="warming();" />
+                            </form>
+                        </div>
                     </div>
                 </div>
             </article>
@@ -193,12 +188,38 @@
         <footer>
             Stacja 4449 Bydgoszcz by Damian Zamroczynski &copy; 2019 Kontakt: damianzamroczynski@gmail.com
         </footer>
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" 
-                integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" 
-                crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" 
-                integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" 
-                crossorigin="anonymous"></script>
+        <script>
+            $(document).ready(function(){
+                $.ajaxSetup({ cache: false});
+                $('#search').keyup(function(){
+                    $('#result').html('');
+                    $('#state').val('');
+                    var searchField = $('#search').val();
+                    var expression = new RegExp(searchField, "i");
+                    $.getJSON('terminy.json', function(data){
+                        $.each(data, function(key, value){
+                            if (value.name.search(expression) != -1)
+                            {
+                                var input = document.createElement("input");
+                                input.type = "radio";
+                                input.value = value.id;
+                                input.name = "choose";
+                                input.class = "dym";
+                                var $tr = $('<tr>').append(
+                                    $('<label>').append(
+                                    $('<td>').text(value.id),
+                                    $('<td>').text(value.name),
+                                    $('<td>').text(value.date),
+                                    $('<td>').append(input))
+                                ).appendTo('#result');
+                                
+                                //console.log($tr.wrap('<p>').html());
+                            }
+                        });
+                    });
+                });
+            });
+        </script>
         <script src="js/bootstrap.min.js"></script>
     </body>
 </html>
