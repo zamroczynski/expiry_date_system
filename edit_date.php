@@ -15,9 +15,8 @@
     $today = new DateTime();
     $today_string = $today->format('Y-m-d');
     
-    function downloadTerminy($db)
-    {
-        
+    function downloadTerminy($db) 
+    { 
         $query = 'SELECT expiry_date.id, products.name, expiry_date.date FROM expiry_date
                     INNER JOIN products ON products.id=expiry_date.id_product ORDER BY expiry_date.date;';
         $json_result = $db->query($query);
@@ -26,13 +25,11 @@
         fwrite($fp, json_encode($json));
         fclose($fp);
     }
-
     if(isset($_POST['download']))
     {
         downloadTerminy($db);
         $_SESSION['succes'] = '<div class="ok">Pobrano nowe terminy!</div>';
     }
-
     if(isset($_POST['delete']))
     {
         $sql = 'DELETE FROM expiry_date WHERE id='.$_POST['choose'];
