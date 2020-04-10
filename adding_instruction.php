@@ -5,6 +5,13 @@
         header('Location: log_in.php');
         exit();
     }
+    require_once 'database_connection.php';
+    if (isset($_POST['editor1']))
+    {
+        $sql = 'INSERT INTO instruction VALUES (NULL, "'.$_POST['title'].'","'.$_POST['editor1'].'", '.$_SESSION['user_id'].', NULL);';
+        $db->query($sql);
+    }
+
 ?>
 <!DOCTYPE HTML>
 <html lang="pl">
@@ -25,6 +32,8 @@
         <!--[if lt IE 9]>
         <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"</scripts>
         <![endif]-->
+
+        <script src="ckeditor/ckeditor.js"></script>
     </head>
     <body>
         <header>
@@ -67,18 +76,18 @@
                             </div>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle active" href="#" data-toggle="dropdown" role="button">Profil</a>
+                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button">Profil</a>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item active" href="user_profile.php">Mój profil</a>
+                                <a class="dropdown-item" href="user_profile.php">Mój profil</a>
                                 <a class="dropdown-item" href="change_password.php">Zmień hasło</a>
                                 <a class="dropdown-item" href="#">###</a>
                             </div>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" role="button">Instrukcje</a>
+                            <a class="nav-link dropdown-toggle active" href="#" data-toggle="dropdown" role="button">Instrukcje</a>
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" href="manual.php">Przegląd instrukcji</a>
-                                <a class="dropdown-item" href="adding_instruction.php">Dodanie Instrukcji</a>
+                                <a class="dropdown-item active" href="adding_instruction.php">Dodanie Instrukcji</a>
                                 <a class="dropdown-item" href="#">Edycja Instrukcji</a>
                             </div>
                         </li>
@@ -97,48 +106,26 @@
                                 unset($_SESSION['acces_denied']);
                             }
                         ?>
-                    <header class="hello">
-                        Witaj <?= $_SESSION['user_name'] ?>
-                    </header>
                     <div class="row">
-                        <div class="col-sm-12 user-profile-hello">
-                        
-                            <div>
-                                Twoje uprawnienia to:
-                                <div> 
-                                    <?php
-                                        if($_SESSION['user_power'] == 10) echo 'Administrator';
-                                        if($_SESSION['user_power'] == 9) echo 'Poszukiwacz błędów';
-                                        if($_SESSION['user_power'] == 8) echo 'Prowadzący Stacje';
-                                        if($_SESSION['user_power'] == 7) echo 'Zastępca PSP';
-                                        if($_SESSION['user_power'] == 6) echo 'Instruktor';
-                                        if($_SESSION['user_power'] == 4) echo 'Prowadzący zmianę';
-                                        if($_SESSION['user_power'] == 2) echo 'Pracownik';
-                                        if($_SESSION['user_power'] == 1) echo 'Nowy Pracownik';
-                                        if($_SESSION['user_power'] == 0) echo 'Gość';
-                                    ?>
-                                </div>
-                            </div>
-                            <div>
-                                Ostatnie logowanie:
-                                <div><?= $_SESSION['user_last_login'] ?></div> 
-                            </div>
+                        <div class="col-sm-12">
+                        <header>Tworzenie Instrukcji</header>
+                            <form method="POST">
+                                <input type="text" placeholder="Tytuł" name="title" required />
+                                <textarea name="editor1" class="form-control" id="editor1">
+
+                                </textarea>
+                                <input type="submit" value="Wyślij" />
+                            </form>
                         </div>
-                        <?php
-                            if($_SESSION['user_power']>5)
-                            {
-                                echo '<div class="col-sm-12 user-profile-border">';
-                                echo '<a href="registration.php">Utwórz nowe konto</a></div>';
-                            }
-                            if($_SESSION['user_power']>7)
-                            {
-                                echo '<div class="col-sm-12 user-profile-border">';
-                                echo '<a href="edit_profile.php">Edycja danych pracownika</a></div>';
-                            }
-                        ?>
                     </div>
                 </div>
             </article>
+            <?php
+                if(isset($_POST['editor1']))
+                {
+                    echo $_POST['editor1'];
+                }
+            ?>
         </main>
         <footer>
             Stacja 4449 Bydgoszcz by Damian Zamroczynski &copy; 2019 Kontakt: damianzamroczynski@gmail.com
@@ -150,5 +137,6 @@
                 integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" 
                 crossorigin="anonymous"></script>
         <script src="js/bootstrap.min.js"></script>
+        <script>CKEDITOR.replace('editor1');</script>
     </body>
 </html>
